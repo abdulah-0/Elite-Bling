@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-800 text-ivory font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+
+  ::selection {
+    @apply bg-gold-400/30 text-ivory;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply relative overflow-hidden bg-gold-gradient text-dark-900 font-semibold py-3.5 px-8 rounded-none tracking-wider uppercase text-sm transition-all duration-500 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:scale-[1.02] active:scale-95;
+  }
+
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300;
+  }
+
+  .btn-primary:hover::after {
+    @apply opacity-100;
+  }
+
+  .btn-secondary {
+    @apply relative overflow-hidden border-2 border-gold-400 text-gold-400 font-semibold py-3 px-8 rounded-none tracking-wider uppercase text-sm transition-all duration-500 hover:bg-gold-400 hover:text-dark-900 hover:shadow-[0_0_30px_rgba(212,175,55,0.3)];
+  }
+
+  .btn-outline {
+    @apply border border-ivory/20 text-ivory font-semibold py-3.5 px-8 rounded-none tracking-wider uppercase text-sm transition-all duration-500 hover:bg-ivory hover:text-dark-900;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3.5 bg-dark-700/50 border border-gold-400/20 text-ivory placeholder:text-dark-400 focus:outline-none focus:border-gold-400 focus:shadow-[0_0_15px_rgba(212,175,55,0.15)] transition-all duration-300 rounded-none;
+  }
+
+  .card {
+    @apply bg-dark-700/30 backdrop-blur-sm border border-gold-400/10 hover:border-gold-400/30 shadow-lg hover:shadow-[0_0_30px_rgba(212,175,55,0.1)] transition-all duration-500 overflow-hidden;
+  }
+
+  .card-hover {
+    @apply hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-500;
+  }
+
+  .glass {
+    @apply bg-dark-700/20 backdrop-blur-xl border border-ivory/10;
+  }
+
+  .glass-gold {
+    @apply bg-dark-700/30 backdrop-blur-xl border border-gold-400/20 shadow-[0_0_30px_rgba(212,175,55,0.1)];
+  }
+
+  .section-title {
+    @apply text-3xl md:text-5xl font-heading font-bold text-ivory mb-4 tracking-wide;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-dark-200 font-body mb-12 max-w-2xl mx-auto;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .gold-text {
+    @apply bg-gold-text bg-clip-text text-transparent bg-[length:200%_auto] animate-gold-shimmer;
+  }
+
+  .gold-border {
+    @apply border border-gold-400/30;
+  }
+
+  .gold-border-bottom {
+    @apply border-b border-gold-400/20;
+  }
+
+  .gold-underline {
+    @apply relative;
+  }
+
+  .gold-underline::after {
+    content: '';
+    @apply absolute -bottom-1 left-1/2 -translate-x-1/2 w-16 h-0.5 bg-gold-400;
+  }
+
+  .whitespace-section {
+    @apply py-20 md:py-28;
+  }
+
+  .badge {
+    @apply absolute top-4 left-4 bg-gold-400 text-dark-900 px-4 py-1.5 text-xs font-semibold tracking-wider uppercase;
+  }
+
+  .badge-soldout {
+    @apply absolute top-4 left-4 bg-dark-900/90 text-ivory px-4 py-1.5 text-xs font-semibold tracking-wider uppercase;
+  }
+
+  .nav-link {
+    @apply relative text-dark-200 hover:text-gold-400 transition-colors duration-300 text-sm tracking-wider uppercase font-medium;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .gold-divider {
+    @apply h-px bg-gradient-to-r from-transparent via-gold-400/50 to-transparent;
+  }
+
+  .counter-number {
+    @apply text-4xl md:text-5xl font-heading font-bold gold-text;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F0F0F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C9A032;
+}
+
+html {
+  scroll-behavior: smooth;
+}
