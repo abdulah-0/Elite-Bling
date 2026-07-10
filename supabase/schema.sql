@@ -1,3 +1,8 @@
+-- ============================================================
+-- Elite Bling - Supabase Schema
+-- Luxury Artificial Jewelry Wholesale Store
+-- ============================================================
+
 -- Create products table
 CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -49,7 +54,7 @@ CREATE POLICY "Authenticated users can delete products"
   TO authenticated
   USING (true);
 
--- Orders policies (users can view their own orders, create orders)
+-- Orders policies (users can view their own orders, anyone can create)
 CREATE POLICY "Users can view their own orders"
   ON orders FOR SELECT
   TO authenticated
@@ -91,13 +96,19 @@ CREATE POLICY "Authenticated users can delete product images"
   TO authenticated
   USING (bucket_id = 'product-images');
 
--- Insert sample products
+-- ============================================================
+-- Sample Products (Jewelry)
+-- ============================================================
 INSERT INTO products (name, description, price, category, rating, stock, featured, top_product, image) VALUES
-('Rolex Submariner', 'Iconic diving watch with exceptional water resistance and timeless design', 3500000, 'Luxury', 4.9, 5, true, true, 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800'),
-('Omega Speedmaster', 'The legendary moonwatch worn by astronauts during space missions', 1900000, 'Sport', 4.8, 8, true, false, 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=800'),
-('TAG Heuer Carrera', 'Racing-inspired chronograph with precision and style', 1175000, 'Sport', 4.7, 12, false, true, 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=800'),
-('Patek Philippe Calatrava', 'Elegant dress watch representing the pinnacle of Swiss watchmaking', 7840000, 'Dress', 5.0, 3, true, true, 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=800'),
-('Seiko Presage', 'Japanese craftsmanship with stunning dial work and automatic movement', 154000, 'Dress', 4.6, 20, false, false, 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800'),
-('Breitling Navitimer', 'Aviation chronograph with slide rule bezel for calculations', 2212000, 'Aviation', 4.8, 6, true, false, 'https://images.unsplash.com/photo-1622434641406-a158123450f9?w=800'),
-('Cartier Santos', 'Historic pilot watch with distinctive square case and exposed screws', 2100000, 'Luxury', 4.7, 7, false, true, 'https://images.unsplash.com/photo-1594534475808-b18fc33b045e?w=800'),
-('Tudor Black Bay', 'Heritage diving watch with vintage-inspired design and modern reliability', 1064000, 'Dive', 4.8, 15, false, false, 'https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=800');
+('Crystal Drop Earrings', 'Elegant crystal drop earrings with gold-plated settings. Perfect for bridal wear and formal occasions.', 2500, 'Earrings', 4.8, 50, true, true, 'https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=800'),
+('Gold Statement Necklace', 'Premium gold-plated statement necklace with intricate floral design. A bestseller for resellers.', 4500, 'Necklaces', 4.9, 35, true, true, 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800'),
+('Rose Gold Stacking Rings', 'Set of 5 rose gold stacking rings with cubic zirconia accents. Mix and match for any look.', 1800, 'Rings', 4.7, 100, true, false, 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800'),
+('Pearl Choker Necklace', 'Classic freshwater pearl choker with gold clasp. Timeless elegance for every wardrobe.', 3200, 'Necklaces', 4.6, 25, false, true, 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=800'),
+('Crystal Tennis Bracelet', 'Stunning crystal tennis bracelet with rhodium-plated chain. Exceptional sparkle and quality.', 2800, 'Bracelets', 4.8, 40, true, false, 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800'),
+('Bridal Jewelry Set', 'Complete bridal set including necklace, earrings, and maang tikka. Gold-plated with authentic crystals.', 8500, 'Bridal Sets', 4.9, 15, true, true, 'https://images.unsplash.com/photo-1515562141589-07e3e00c00bd?w=800'),
+('Hoop Earrings Gold', 'Classic gold-plated hoop earrings available in 3 sizes. A staple for every boutique.', 1500, 'Earrings', 4.5, 200, false, false, 'https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800'),
+('Adjustable Ring Set', 'Set of 6 adjustable rings with various stone colors. Perfect for party wear and gifting.', 1200, 'Rings', 4.4, 150, false, true, 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800'),
+('Layered Gold Necklace', 'Trendy layered gold chain necklace with pendant. Lightweight and elegant for daily wear.', 2200, 'Necklaces', 4.7, 60, false, false, 'https://images.unsplash.com/photo-1599643477871-8eb5c1db3b3a?w=800'),
+('Cuff Bracelet Gold', 'Wide gold-plated cuff bracelet with embossed pattern. Statement piece for evening wear.', 3500, 'Bracelets', 4.6, 30, false, false, 'https://images.unsplash.com/photo-1617038220302-464505b0d8db?w=800'),
+('Stud Earrings Collection', 'Set of 6 pairs of crystal stud earrings in assorted colors. Great variety for resellers.', 2000, 'Earrings', 4.5, 80, false, true, 'https://images.unsplash.com/photo-1588444837495-c6cfeb53a32a?w=800'),
+('Vintage Bridal Necklace', 'Vintage-inspired gold bridal necklace with emerald-cut crystals. Heirloom quality design.', 5500, 'Bridal Sets', 4.8, 20, true, false, 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800');

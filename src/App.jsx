@@ -13,10 +13,16 @@ import Signup from './pages/Signup'
 import Admin from './pages/Admin'
 import Wholesale from './pages/Wholesale'
 import ProtectedRoute from './components/ProtectedRoute'
+import ScrollToTop from './components/ScrollToTop'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import RefundPolicy from './pages/RefundPolicy'
+import ShippingPolicy from './pages/ShippingPolicy'
+import TermsConditions from './pages/TermsConditions'
 
 function App() {
     return (
         <div className="flex flex-col min-h-screen">
+            <ScrollToTop />
             <Navbar />
             <main className="flex-grow">
                 <Routes>
@@ -28,6 +34,10 @@ function App() {
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/wholesale" element={<Wholesale />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                    <Route path="/terms-conditions" element={<TermsConditions />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route

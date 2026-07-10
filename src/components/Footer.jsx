@@ -93,11 +93,17 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-gold-400/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-dark-400 text-sm">
+                <div className="border-t border-gold-400/10 mt-12 pt-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <p className="text-dark-400 text-sm text-center lg:text-left order-3 lg:order-1">
                         &copy; {new Date().getFullYear()} Elite Bling. All rights reserved.
                     </p>
-                    <div className="flex items-center space-x-6 text-sm text-dark-400">
+                    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-dark-300 order-1 lg:order-2">
+                        <Link to="/privacy-policy" className="hover:text-gold-400 transition-colors">Privacy Policy</Link>
+                        <Link to="/terms-conditions" className="hover:text-gold-400 transition-colors">Terms & Conditions</Link>
+                        <Link to="/shipping-policy" className="hover:text-gold-400 transition-colors">Shipping Policy</Link>
+                        <Link to="/refund-policy" className="hover:text-gold-400 transition-colors">Returns & Refunds</Link>
+                    </div>
+                    <div className="flex items-center space-x-6 text-sm text-dark-400 order-2 lg:order-3">
                         <span className="tracking-widest uppercase text-gold-400/60">Luxury Redefined</span>
                     </div>
                 </div>
