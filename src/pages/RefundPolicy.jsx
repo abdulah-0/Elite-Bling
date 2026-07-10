@@ -107,7 +107,7 @@ const RefundPolicy = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">For any questions or support regarding returns, reach out to our team at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">elitebling@gmail.com | 03447224448</p>
+                        <p className="text-gold-400 font-semibold font-heading">elitebling@gmail.com | +923290987690</p>
                         <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
                     </div>
                 </div>

@@ -96,11 +96,11 @@ const About = () => {
                         </div>
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Phone</h3>
-                            <p className="text-dark-200">03447224448</p>
+                            <p className="text-dark-200">+923290987690</p>
                         </div>
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Location</h3>
-                            <p className="text-dark-200">18, Mobile Arena, SOAN Garden, Islamabad</p>
+                            <p className="text-dark-200">House#43, Street#2, Extension Gulzar e Quaid, Rawalpindi</p>
                         </div>
                     </div>
                 </div>

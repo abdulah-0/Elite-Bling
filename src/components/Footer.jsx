@@ -82,11 +82,11 @@ const Footer = () => {
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiPhone className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">03447224448</span>
+                                <span className="text-sm">+923290987690</span>
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiMapPin className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">18, Mobile Arena, SOAN Garden, Islamabad</span>
+                                <span className="text-sm">House#43, Street#2, Extension Gulzar e Quaid, Rawalpindi</span>
                             </li>
                         </ul>
                     </div>
