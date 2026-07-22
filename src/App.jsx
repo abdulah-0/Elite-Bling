@@ -12,6 +12,9 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Admin from './pages/Admin'
 import Wholesale from './pages/Wholesale'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailure from './pages/PaymentFailure'
+import PaymentComplete from './pages/PaymentComplete'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
 import PrivacyPolicy from './pages/PrivacyPolicy'
@@ -34,6 +37,9 @@ function App() {
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/wholesale" element={<Wholesale />} />
+                    <Route path="/payment/success" element={<PaymentSuccess />} />
+                    <Route path="/payment/failure" element={<PaymentFailure />} />
+                    <Route path="/payment/complete" element={<PaymentComplete />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
                     <Route path="/shipping-policy" element={<ShippingPolicy />} />

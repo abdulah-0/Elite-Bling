@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../supabase/client'
-import { FiCheck, FiShield, FiTruck, FiLock } from 'react-icons/fi'
+import { FiCheck, FiShield, FiTruck, FiLock, FiCreditCard } from 'react-icons/fi'
 
 const Checkout = () => {
     const navigate = useNavigate()
     const { cart, getCartTotal, clearCart } = useCart()
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
-    const [step, setStep] = useState(1)
+    const [paymentMethod, setPaymentMethod] = useState('cod')
     const [formData, setFormData] = useState({
         fullName: '',
         email: user?.email || '',
@@ -24,32 +24,24 @@ const Checkout = () => {
     })
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
+        setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleCodOrder = async () => {
         setLoading(true)
-
         try {
             const { data, error } = await supabase
                 .from('orders')
-                .insert([
-                    {
-                        user_id: user?.id || null,
-                        order_items: cart,
-                        total_price: getCartTotal(),
-                        status: 'pending',
-                        shipping_info: formData
-                    }
-                ])
+                .insert([{
+                    user_id: user?.id || null,
+                    order_items: cart,
+                    total_price: getCartTotal(),
+                    status: 'pending',
+                    shipping_info: formData
+                }])
                 .select()
 
             if (error) throw error
-
             clearCart()
             navigate('/order-success', { state: { order: data[0] } })
         } catch (error) {
@@ -57,6 +49,56 @@ const Checkout = () => {
             alert('Failed to place order. Please try again.')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleCardPayment = async () => {
+        setLoading(true)
+        try {
+            const { data, error } = await supabase
+                .from('orders')
+                .insert([{
+                    user_id: user?.id || null,
+                    order_items: cart,
+                    total_price: getCartTotal(),
+                    status: 'pending',
+                    shipping_info: formData
+                }])
+                .select()
+
+            if (error) throw error
+
+            const res = await fetch('/api/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: getCartTotal(),
+                    phone: formData.phone,
+                    email: formData.email,
+                    orderId: data[0].id,
+                }),
+            })
+
+            const { redirectUrl } = await res.json()
+            if (redirectUrl) {
+                window.location.href = redirectUrl
+            } else {
+                alert('Failed to initiate payment. Please try again.')
+            }
+        } catch (error) {
+            console.error('Payment error:', error)
+            alert('Failed to process payment. Please try again.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (paymentMethod === 'cod') {
+            handleCodOrder()
+        } else {
+            handleCardPayment()
         }
     }
 
@@ -144,22 +186,53 @@ const Checkout = () => {
                                     <textarea name="notes" value={formData.notes} onChange={handleChange} rows="4" className="input-field" placeholder="Any special instructions..." />
                                 </div>
 
-                                {/* Payment Method */}
-                                <div className="border border-gold-400/20 bg-dark-800/50 p-6 mb-6">
+                                {/* Payment Method Selection */}
+                                <div className="mb-6">
                                     <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-4">Payment Method</h3>
-                                    <div className="flex items-center space-x-3 text-ivory">
-                                        <div className="w-5 h-5 border-2 border-gold-400 rounded-full flex items-center justify-center">
-                                            <div className="w-2.5 h-2.5 bg-gold-400 rounded-full" />
-                                        </div>
-                                        <span className="font-medium">Cash on Delivery (COD)</span>
+                                    <div className="space-y-4">
+                                        <label className={`flex items-start p-4 border cursor-pointer transition-all duration-300 ${paymentMethod === 'cod' ? 'border-gold-400 bg-gold-400/5' : 'border-gold-400/20 hover:border-gold-400/40'}`}>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethod"
+                                                value="cod"
+                                                checked={paymentMethod === 'cod'}
+                                                onChange={() => setPaymentMethod('cod')}
+                                                className="sr-only"
+                                            />
+                                            <div className={`w-5 h-5 mt-0.5 border-2 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'cod' ? 'border-gold-400' : 'border-dark-500'}`}>
+                                                {paymentMethod === 'cod' && <div className="w-2.5 h-2.5 bg-gold-400 rounded-full" />}
+                                            </div>
+                                            <div className="ml-4">
+                                                <p className="font-medium text-ivory">Cash on Delivery</p>
+                                                <p className="text-sm text-dark-400 mt-1">Pay when your order is delivered</p>
+                                            </div>
+                                        </label>
+
+                                        <label className={`flex items-start p-4 border cursor-pointer transition-all duration-300 ${paymentMethod === 'card' ? 'border-gold-400 bg-gold-400/5' : 'border-gold-400/20 hover:border-gold-400/40'}`}>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethod"
+                                                value="card"
+                                                checked={paymentMethod === 'card'}
+                                                onChange={() => setPaymentMethod('card')}
+                                                className="sr-only"
+                                            />
+                                            <div className={`w-5 h-5 mt-0.5 border-2 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'card' ? 'border-gold-400' : 'border-dark-500'}`}>
+                                                {paymentMethod === 'card' && <div className="w-2.5 h-2.5 bg-gold-400 rounded-full" />}
+                                            </div>
+                                            <div className="ml-4">
+                                                <div className="flex items-center space-x-2">
+                                                    <FiCreditCard className="text-gold-400" />
+                                                    <p className="font-medium text-ivory">Credit / Debit Card</p>
+                                                </div>
+                                                <p className="text-sm text-dark-400 mt-1">Pay securely via Rapid Gateway (Visa / Mastercard)</p>
+                                            </div>
+                                        </label>
                                     </div>
-                                    <p className="text-sm text-dark-400 mt-2 ml-8">
-                                        Pay when your order is delivered to your doorstep
-                                    </p>
                                 </div>
 
                                 <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
-                                    {loading ? 'Placing Order...' : 'Place Order'}
+                                    {loading ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
                                 </button>
                             </div>
                         </form>
@@ -200,7 +273,6 @@ const Checkout = () => {
                                 </div>
                             </div>
 
-                            {/* Trust Badges */}
                             <div className="mt-6 pt-6 border-t border-gold-400/10 space-y-3">
                                 <div className="flex items-center space-x-3 text-dark-400 text-xs">
                                     <FiLock className="text-gold-400 shrink-0" />
