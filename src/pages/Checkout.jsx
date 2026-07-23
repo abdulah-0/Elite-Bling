@@ -10,6 +10,7 @@ const Checkout = () => {
     const { cart, getCartTotal, clearCart } = useCart()
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
+    const [step, setStep] = useState(1)
     const [paymentMethod, setPaymentMethod] = useState('cod')
     const [formData, setFormData] = useState({
         fullName: '',
