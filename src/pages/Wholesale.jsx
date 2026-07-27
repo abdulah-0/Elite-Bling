@@ -59,7 +59,7 @@ const Wholesale = () => {
                     <div className="max-w-3xl animate-fade-in-up">
                         <span className="text-gold-400 text-sm tracking-[0.3em] uppercase font-medium border-l-2 border-gold-400 pl-4">Wholesale Program</span>
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-ivory mt-6 mb-6 leading-tight">
-                            Partner with <span className="gold-text">Elite Bling</span>
+                            Partner with <span className="gold-text">Ellite Bling</span>
                         </h1>
                         <p className="text-lg md:text-xl text-dark-200 mb-10 max-w-xl">
                             Join 200+ resellers and boutique owners who trust us for premium quality jewelry at unbeatable wholesale prices.
@@ -164,7 +164,7 @@ const Wholesale = () => {
                                 <FiCheck className="text-3xl text-green-500" />
                             </div>
                             <h3 className="text-2xl font-heading font-bold text-ivory mb-4">Application Submitted!</h3>
-                            <p className="text-dark-300 mb-6">Thank you for your interest in partnering with Elite Bling. Our team will review your application and contact you within 24-48 hours.</p>
+                            <p className="text-dark-300 mb-6">Thank you for your interest in partnering with Ellite Bling. Our team will review your application and contact you within 24-48 hours.</p>
                             <Link to="/" className="btn-primary">
                                 Return Home
                             </Link>

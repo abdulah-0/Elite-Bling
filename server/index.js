@@ -40,7 +40,7 @@ app.post('/api/create-payment', async (req, res) => {
 
     const body = new URLSearchParams({
       MERCHANT_ID:            process.env.RG_MERCHANT_ID,
-      MERCHANT_NAME:          'Elite Bling',
+      MERCHANT_NAME:          'Ellite Bling',
       TXNAMT:                 String(amount),
       CURRENCY_CODE:          'PKR',
       CUSTOMER_MOBILE_NO:     phone,
@@ -128,5 +128,5 @@ app.patch('/api/order/:id/status', async (req, res) => {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Elite Bling server running on port ${PORT}`)
+  console.log(`Ellite Bling server running on port ${PORT}`)
 })

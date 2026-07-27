@@ -8,7 +8,7 @@ const About = () => {
                 {/* Header */}
                 <div className="text-center mb-20">
                     <span className="text-gold-400 text-sm tracking-[0.3em] uppercase font-medium">Our Story</span>
-                    <h1 className="section-title mt-4">The Elite Bling Story</h1>
+                    <h1 className="section-title mt-4">The Ellite Bling Story</h1>
                     <p className="section-subtitle">Redefining luxury artificial jewelry for the modern reseller</p>
                 </div>
 
@@ -19,7 +19,7 @@ const About = () => {
                             Where <span className="gold-text">Elegance</span> Meets Affordability
                         </h2>
                         <p className="text-dark-300 mb-6 leading-relaxed">
-                            Elite Bling was born from a vision to democratize luxury jewelry. We believe that 
+                            Ellite Bling was born from a vision to democratize luxury jewelry. We believe that 
                             elegance and sophistication should be accessible to everyone, not just a select few. 
                             Our mission is to provide premium quality artificial jewelry at wholesale prices, 
                             empowering resellers and boutique owners to offer their customers exceptional pieces 
@@ -92,7 +92,7 @@ const About = () => {
                     <div className="grid md:grid-cols-3 gap-8 text-center">
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Email</h3>
-                            <p className="text-dark-200">elitebling@gmail.com</p>
+                            <p className="text-dark-200">ellitebling@gmail.com</p>
                         </div>
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Phone</h3>
@@ -100,7 +100,7 @@ const About = () => {
                         </div>
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Location</h3>
-                            <p className="text-dark-200">House#43, Street#2, Extension Gulzar e Quaid, Rawalpindi</p>
+                            <p className="text-dark-200">House#43, Street#2, Extension Gulzar e Quaid Champion Colony , Rawalpindi</p>
                         </div>
                     </div>
                 </div>

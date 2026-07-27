@@ -11,7 +11,7 @@ const RefundPolicy = () => {
                         Return & <span className="gold-text">Refund</span> Policy
                     </h1>
                     <p className="text-dark-300 text-lg leading-relaxed">
-                        We want you to be completely satisfied with your Elite Bling pieces. 
+                        We want you to be completely satisfied with your Ellite Bling pieces. 
                         Read our simple guidelines for returns, exchanges, and refunds.
                     </p>
                     <div className="gold-divider mt-8"></div>
@@ -36,7 +36,7 @@ const RefundPolicy = () => {
                             </p>
                             <ul className="list-disc list-inside pl-4 space-y-2 text-dark-300">
                                 <li>The jewelry piece must be unused, unworn, and in the same condition that you received it.</li>
-                                <li>It must be in its original premium Elite Bling packaging (box and velvet pouch).</li>
+                                <li>It must be in its original premium Ellite Bling packaging (box and velvet pouch).</li>
                                 <li>Any price tags or product seals must remain intact and attached.</li>
                             </ul>
                         </div>
@@ -75,7 +75,7 @@ const RefundPolicy = () => {
                                 Requesting a return is simple and straightforward:
                             </p>
                             <ol className="list-decimal list-inside pl-4 space-y-2 text-dark-300">
-                                <li>Email us at <strong>elitebling@gmail.com</strong> or message us on WhatsApp with your Order ID and photos of the item you wish to return.</li>
+                                <li>Email us at <strong>ellitebling@gmail.com</strong> or message us on WhatsApp with your Order ID and photos of the item you wish to return.</li>
                                 <li>Our team will review your request within 24–48 hours and provide details on where to send the parcel.</li>
                                 <li>Package the item securely to avoid transit damage, and ship it back to us via a tracked courier service. Return shipping costs are paid by the customer unless the return is due to our error (wrong or damaged item).</li>
                             </ol>
@@ -107,7 +107,7 @@ const RefundPolicy = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">For any questions or support regarding returns, reach out to our team at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">elitebling@gmail.com | +923290987690</p>
+                        <p className="text-gold-400 font-semibold font-heading">ellitebling@gmail.com | +923290987690</p>
                         <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
                     </div>
                 </div>

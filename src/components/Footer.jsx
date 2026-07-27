@@ -33,7 +33,7 @@ const Footer = () => {
                     {/* Brand */}
                     <div className="lg:col-span-1">
                         <Link to="/" className="inline-block mb-6">
-                            <span className="text-2xl font-heading font-bold gold-text tracking-wider">Elite Bling</span>
+                            <span className="text-2xl font-heading font-bold gold-text tracking-wider">Ellite Bling</span>
                         </Link>
                         <p className="text-dark-300 mb-6 leading-relaxed">
                             Your premier destination for luxury artificial jewelry at wholesale prices. 
@@ -78,7 +78,7 @@ const Footer = () => {
                         <ul className="space-y-4">
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiMail className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">elitebling@gmail.com</span>
+                                <span className="text-sm">ellitebling@gmail.com</span>
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiPhone className="text-gold-400 mt-1 shrink-0" />
@@ -86,7 +86,7 @@ const Footer = () => {
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiMapPin className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">House#43, Street#2, Extension Gulzar e Quaid, Rawalpindi</span>
+                                <span className="text-sm">House#43, Street#2, Extension Gulzar e Quaid Champion Colony , Rawalpindi</span>
                             </li>
                         </ul>
                     </div>
@@ -95,7 +95,7 @@ const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gold-400/10 mt-12 pt-8 flex flex-col lg:flex-row items-center justify-between gap-6">
                     <p className="text-dark-400 text-sm text-center lg:text-left order-3 lg:order-1">
-                        &copy; {new Date().getFullYear()} Elite Bling. All rights reserved.
+                        &copy; {new Date().getFullYear()} Ellite Bling. All rights reserved.
                     </p>
                     <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-dark-300 order-1 lg:order-2">
                         <Link to="/privacy-policy" className="hover:text-gold-400 transition-colors">Privacy Policy</Link>

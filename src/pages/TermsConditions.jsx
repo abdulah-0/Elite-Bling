@@ -11,7 +11,7 @@ const TermsConditions = () => {
                         Terms & <span className="gold-text">Conditions</span>
                     </h1>
                     <p className="text-dark-300 text-lg leading-relaxed">
-                        Welcome to Elite Bling. By accessing our platform, you agree to comply with and be bound 
+                        Welcome to Ellite Bling. By accessing our platform, you agree to comply with and be bound 
                         by the following terms of service.
                     </p>
                     <div className="gold-divider mt-8"></div>
@@ -47,7 +47,7 @@ const TermsConditions = () => {
                         </div>
                         <div className="space-y-4 text-dark-200 leading-relaxed text-sm md:text-base">
                             <p>
-                                All content on this website, including but not limited to jewelry designs, product photos, graphics, logos, text, button icons, and software, is the property of Elite Bling and is protected by copyright and intellectual property laws of Pakistan and international treaties.
+                                All content on this website, including but not limited to jewelry designs, product photos, graphics, logos, text, button icons, and software, is the property of Ellite Bling and is protected by copyright and intellectual property laws of Pakistan and international treaties.
                             </p>
                             <p>
                                 Any unauthorized copy, reproduction, distribution, or commercial exploitation of our designs or website media is strictly prohibited.
@@ -87,7 +87,7 @@ const TermsConditions = () => {
                             </p>
                             <ul className="list-disc list-inside pl-4 space-y-2 text-dark-300">
                                 <li><strong>Minimum Order Value:</strong> Wholesale prices apply only when minimum order conditions are met (as listed on the Wholesale page).</li>
-                                <li><strong>Resale Rights:</strong> You may resell Elite Bling jewelry in your retail stores or online platforms, but you may not represent yourself as the manufacturer.</li>
+                                <li><strong>Resale Rights:</strong> You may resell Ellite Bling jewelry in your retail stores or online platforms, but you may not represent yourself as the manufacturer.</li>
                                 <li><strong>Account Termination:</strong> We reserve the right to terminate wholesale account access if policy violations, price-undercutting, or brand misrepresentations are discovered.</li>
                             </ul>
                         </div>
@@ -106,7 +106,7 @@ const TermsConditions = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">If you have any questions or require clarifications on these Terms, please reach us at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">elitebling@gmail.com | +923290987690</p>
+                        <p className="text-gold-400 font-semibold font-heading">ellitebling@gmail.com | +923290987690</p>
                         <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
                     </div>
                 </div>

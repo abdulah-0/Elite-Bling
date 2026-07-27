@@ -53,7 +53,7 @@ const Signup = () => {
                 <div className="card p-8 md:p-10">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-heading font-bold text-ivory mb-2">Create Account</h1>
-                        <p className="text-dark-400 text-sm">Join Elite Bling and start shopping</p>
+                        <p className="text-dark-400 text-sm">Join Ellite Bling and start shopping</p>
                     </div>
 
                     {error && (

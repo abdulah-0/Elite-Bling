@@ -59,12 +59,12 @@ const Home = () => {
         { icon: FiDollarSign, title: 'Bulk Discounts', desc: 'Exclusive pricing for bulk orders with increasing discounts at every tier.' },
         { icon: FiTruck, title: 'Nationwide Delivery', desc: 'Free shipping on orders above Rs. 5,000. Fast and secure delivery across Pakistan.' },
         { icon: FiAward, title: 'Premium Quality', desc: 'Every piece is handpicked for its craftsmanship. We ensure consistent quality across all orders.' },
-        { icon: FiShield, title: 'Trusted by Resellers', desc: 'Join 200+ trusted boutique owners and resellers who choose Elite Bling.' },
+        { icon: FiShield, title: 'Trusted by Resellers', desc: 'Join 200+ trusted boutique owners and resellers who choose Ellite Bling.' },
     ]
 
     const testimonials = [
-        { name: 'Ayesha K.', role: 'Boutique Owner, Lahore', text: 'Elite Bling has transformed my boutique. The quality is exceptional and my customers love the designs.' },
-        { name: 'Fatima Z.', role: 'Online Reseller, Karachi', text: 'The wholesale pricing is unbeatable. I\'ve doubled my profit margins since switching to Elite Bling.' },
+        { name: 'Ayesha K.', role: 'Boutique Owner, Lahore', text: 'Ellite Bling has transformed my boutique. The quality is exceptional and my customers love the designs.' },
+        { name: 'Fatima Z.', role: 'Online Reseller, Karachi', text: 'The wholesale pricing is unbeatable. I\'ve doubled my profit margins since switching to Ellite Bling.' },
         { name: 'Sana M.', role: 'Wedding Planner, Islamabad', text: 'Their bridal sets are absolutely stunning. My clients always get compliments.' },
     ]
 
@@ -119,7 +119,7 @@ const Home = () => {
                     <div className="text-center mb-16">
                         <span className="text-gold-400 text-sm tracking-[0.3em] uppercase font-medium">Why Choose Us</span>
                         <h2 className="section-title mt-4">The Elite Advantage</h2>
-                        <p className="section-subtitle">What makes Elite Bling the preferred choice for resellers</p>
+                        <p className="section-subtitle">What makes Ellite Bling the preferred choice for resellers</p>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {benefits.map((benefit, idx) => (
@@ -203,7 +203,7 @@ const Home = () => {
                         Ready to Elevate Your <span className="gold-text">Collection</span>?
                     </h2>
                     <p className="text-lg text-dark-200 mb-10 max-w-2xl mx-auto">
-                        Join hundreds of successful resellers who trust Elite Bling for premium quality jewelry at unbeatable wholesale prices.
+                        Join hundreds of successful resellers who trust Ellite Bling for premium quality jewelry at unbeatable wholesale prices.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link to="/products" className="btn-primary">

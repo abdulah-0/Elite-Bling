@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
                         Privacy <span className="gold-text">Policy</span>
                     </h1>
                     <p className="text-dark-300 text-lg leading-relaxed">
-                        At Elite Bling, we value your trust and are committed to protecting your personal information. 
+                        At Ellite Bling, we value your trust and are committed to protecting your personal information. 
                         This policy outlines how we collect, use, and safeguard your data.
                     </p>
                     <div className="gold-divider mt-8"></div>
@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
                         </div>
                         <div className="space-y-4 text-dark-200 leading-relaxed text-sm md:text-base">
                             <p>
-                                Elite Bling processes your information to deliver a premium luxury shopping experience. This includes:
+                                Ellite Bling processes your information to deliver a premium luxury shopping experience. This includes:
                             </p>
                             <ul className="list-disc list-inside pl-4 space-y-2 text-dark-300">
                                 <li>Processing, fulfilling, and shipping your retail and wholesale orders.</li>
@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">If you have any questions regarding this Privacy Policy, please contact us at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">elitebling@gmail.com</p>
+                        <p className="text-gold-400 font-semibold font-heading">ellitebling@gmail.com</p>
                         <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
                     </div>
                 </div>

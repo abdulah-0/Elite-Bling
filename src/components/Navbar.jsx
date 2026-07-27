@@ -58,7 +58,7 @@ const Navbar = () => {
                         {/* Logo */}
                         <Link to="/" className="flex items-center space-x-2">
                             <span className={`font-heading font-bold gold-text tracking-wider transition-all duration-500 ${isScrolled ? 'text-xl' : 'text-2xl md:text-3xl'}`}>
-                                Elite Bling
+                                Ellite Bling
                             </span>
                         </Link>
 

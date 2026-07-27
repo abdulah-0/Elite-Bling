@@ -26,7 +26,7 @@ const slides = [
         id: 3,
         title: 'Wholesale Excellence',
         subtitle: 'Trusted by Resellers',
-        description: 'Join hundreds of boutique owners who trust Elite Bling',
+        description: 'Join hundreds of boutique owners who trust Ellite Bling',
         cta: 'Shop Wholesale',
         cta2: 'Learn More',
         cta2Link: '/wholesale',

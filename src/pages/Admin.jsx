@@ -140,7 +140,7 @@ const Admin = () => {
                 <div className="flex justify-between items-center mb-10">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-heading font-bold text-ivory mb-1">Admin Dashboard</h1>
-                        <p className="text-dark-400 text-sm">Manage your Elite Bling product catalog</p>
+                        <p className="text-dark-400 text-sm">Manage your Ellite Bling product catalog</p>
                     </div>
                     <button onClick={() => openModal()} className="btn-primary flex items-center space-x-2">
                         <FiPlus />
