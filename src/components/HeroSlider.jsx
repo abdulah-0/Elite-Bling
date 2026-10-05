@@ -69,9 +69,15 @@ const HeroSlider = () => {
                                         {slide.subtitle}
                                     </span>
                                 </div>
-                                <h1 className={`text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-ivory mb-6 leading-tight transition-all duration-1000 delay-400 ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                                    {slide.title}
-                                </h1>
+                                {index === 0 ? (
+                                    <h1 className={`text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-ivory mb-6 leading-tight transition-all duration-1000 delay-400 ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                                        {slide.title}
+                                    </h1>
+                                ) : (
+                                    <h2 className={`text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-ivory mb-6 leading-tight transition-all duration-1000 delay-400 ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                                        {slide.title}
+                                    </h2>
+                                )}
                                 <p className={`text-lg md:text-xl text-dark-200 mb-10 max-w-xl leading-relaxed transition-all duration-1000 delay-600 ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                                     {slide.description}
                                 </p>

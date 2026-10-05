@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import { FiShield, FiAward, FiHeart, FiStar } from 'react-icons/fi'
 
 const About = () => {
     return (
         <div className="py-16 md:py-20">
+            <SEO
+                title="About Us - Luxury Artificial Jewelry Story"
+                description="Learn about Ellite Bling: our mission, values, and dedication to providing premium artificial jewelry at wholesale rates across Pakistan."
+                canonical="https://ellitebling.com/about"
+            />
             <div className="container-custom">
                 {/* Header */}
                 <div className="text-center mb-20">
@@ -92,15 +98,17 @@ const About = () => {
                     <div className="grid md:grid-cols-3 gap-8 text-center">
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Email</h3>
-                            <p className="text-dark-200">ellitebling@gmail.com</p>
+                            <a href="mailto:ellitebling@gmail.com" className="text-dark-200 hover:text-gold-400 transition-colors">ellitebling@gmail.com</a>
                         </div>
                         <div>
-                            <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Phone</h3>
-                            <p className="text-dark-200">+923290987690</p>
+                            <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Phone & WhatsApp</h3>
+                            <a href="https://wa.me/923290987690?text=Hello%20Ellite%20Bling%2C%20I%20would%20like%20to%20get%20in%20touch." target="_blank" rel="noopener noreferrer" className="text-dark-200 hover:text-gold-400 transition-colors">
+                                +92 329 0987690
+                            </a>
                         </div>
                         <div>
                             <h3 className="text-sm tracking-widest uppercase text-gold-400 font-semibold mb-2">Location</h3>
-                            <p className="text-dark-200">House#43, Street#2, Extension Gulzar e Quaid Champion Colony , Rawalpindi</p>
+                            <p className="text-dark-200">House#43, Street#2, Extension Gulzar e Quaid Champion Colony, Rawalpindi</p>
                         </div>
                     </div>
                 </div>

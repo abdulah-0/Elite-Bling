@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../supabase/client'
 import { useCart } from '../context/CartContext'
+import SEO from '../components/SEO'
+import { defaultProducts } from '../data/products'
 import { FiStar, FiShoppingCart, FiArrowLeft, FiHeart, FiShare2, FiCheck, FiTruck } from 'react-icons/fi'
 
 const ProductDetails = () => {
@@ -27,10 +29,15 @@ const ProductDetails = () => {
                 .eq('id', id)
                 .single()
 
-            if (error) throw error
-            setProduct(data)
+            if (error || !data) {
+                const local = defaultProducts.find(p => String(p.id) === String(id))
+                setProduct(local || null)
+            } else {
+                setProduct(data)
+            }
         } catch (error) {
-            console.error('Error fetching product:', error)
+            const local = defaultProducts.find(p => String(p.id) === String(id))
+            setProduct(local || null)
         } finally {
             setLoading(false)
         }
@@ -75,6 +82,39 @@ const ProductDetails = () => {
 
     return (
         <div className="py-16 md:py-20">
+            <SEO
+                title={`${product.name} - ${product.category || 'Jewelry'} Wholesale`}
+                description={product.description || `Buy ${product.name} at wholesale prices from Ellite Bling Pakistan. Premium artificial jewelry for boutiques and resellers.`}
+                canonical={`https://ellitebling.com/products/${product.id}`}
+                ogImage={product.image}
+            />
+            {/* Structured Data: Product Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org/",
+                        "@type": "Product",
+                        "name": product.name,
+                        "image": [product.image],
+                        "description": product.description || `${product.name} - Luxury artificial jewelry piece by Ellite Bling Pakistan.`,
+                        "sku": `EB-${product.id}`,
+                        "category": product.category || 'Jewelry',
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Ellite Bling"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "url": `https://ellitebling.com/products/${product.id}`,
+                            "priceCurrency": "PKR",
+                            "price": product.price,
+                            "availability": "https://schema.org/InStock",
+                            "itemCondition": "https://schema.org/NewCondition"
+                        }
+                    })
+                }}
+            />
             <div className="container-custom">
                 {/* Breadcrumb */}
                 <div className="flex items-center space-x-2 text-sm text-dark-400 mb-8">
@@ -91,7 +131,7 @@ const ProductDetails = () => {
                         <div className="relative bg-dark-700 overflow-hidden group cursor-crosshair">
                             <img
                                 src={product.image}
-                                alt={product.name}
+                                alt={`${product.name} - Ellite Bling Luxury Artificial Jewelry`}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-dark-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

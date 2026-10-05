@@ -1,9 +1,15 @@
 import React from 'react'
+import SEO from '../components/SEO'
 import { FiLock, FiEye, FiShield, FiFileText } from 'react-icons/fi'
 
 const PrivacyPolicy = () => {
     return (
         <div className="bg-dark-800 text-ivory min-h-screen py-16 md:py-24 animate-fade-in">
+            <SEO
+                title="Privacy Policy"
+                description="Read Ellite Bling's Privacy Policy. Learn how we safeguard your personal data, secure transactions, and maintain confidentiality."
+                canonical="https://ellitebling.com/privacy-policy"
+            />
             <div className="container-custom">
                 {/* Header Section */}
                 <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in-up">
@@ -101,8 +107,11 @@ const PrivacyPolicy = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">If you have any questions regarding this Privacy Policy, please contact us at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">ellitebling@gmail.com</p>
-                        <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
+                        <p className="text-gold-400 font-semibold font-heading mb-1">
+                            <a href="mailto:ellitebling@gmail.com" className="hover:underline">ellitebling@gmail.com</a> | <a href="https://wa.me/923290987690" target="_blank" rel="noopener noreferrer" className="hover:underline">WhatsApp: 03290987690</a>
+                        </p>
+                        <p className="text-xs text-dark-400">House#43, Street#2, Extension Gulzar e Quaid Champion Colony, Rawalpindi</p>
+                        <p className="text-xs text-dark-500 mt-3">Last Updated: October 5, 2026</p>
                     </div>
                 </div>
             </div>

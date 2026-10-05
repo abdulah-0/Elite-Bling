@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
 import ProductCard from './ProductCard'
 import { Link } from 'react-router-dom'
+import { defaultProducts } from '../data/products'
 
 const FeaturedProducts = () => {
     const [products, setProducts] = useState([])
@@ -19,10 +20,15 @@ const FeaturedProducts = () => {
                 .eq('featured', true)
                 .limit(4)
 
-            if (error) throw error
-            setProducts(data || [])
+            if (error || !data || data.length === 0) {
+                const fallbackFeatured = defaultProducts.filter(p => p.featured).slice(0, 4)
+                setProducts(fallbackFeatured)
+            } else {
+                setProducts(data)
+            }
         } catch (error) {
-            console.error('Error fetching featured products:', error)
+            const fallbackFeatured = defaultProducts.filter(p => p.featured).slice(0, 4)
+            setProducts(fallbackFeatured)
         } finally {
             setLoading(false)
         }

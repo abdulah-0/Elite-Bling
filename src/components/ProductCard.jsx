@@ -28,9 +28,10 @@ const ProductCard = ({ product }) => {
                 <div className="relative h-72 bg-dark-700 overflow-hidden">
                     <img
                         src={product.image}
-                        alt={product.name}
+                        alt={`${product.name} - Ellite Bling Luxury Artificial Jewelry`}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         loading="lazy"
+                        decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 

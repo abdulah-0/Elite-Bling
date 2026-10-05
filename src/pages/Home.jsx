@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import HeroSlider from '../components/HeroSlider'
 import FeaturedProducts from '../components/FeaturedProducts'
 import TopProducts from '../components/TopProducts'
+import SEO from '../components/SEO'
 import { FiShield, FiTruck, FiAward, FiDollarSign, FiUsers, FiStar, FiChevronRight } from 'react-icons/fi'
 
 const Home = () => {
@@ -70,6 +71,11 @@ const Home = () => {
 
     return (
         <div>
+            <SEO
+                title="Ellite Bling - Luxury Artificial Jewelry Wholesale in Pakistan"
+                description="Shop Pakistan's finest luxury artificial jewelry at wholesale rates. Bridal sets, necklaces, rings, bracelets & earrings with nationwide delivery."
+                canonical="https://ellitebling.com/"
+            />
             {/* Hero Section */}
             <HeroSlider />
 

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FiMail, FiPhone, FiMapPin, FiInstagram, FiFacebook } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa6'
 
 const Footer = () => {
     return (
@@ -39,12 +40,33 @@ const Footer = () => {
                             Your premier destination for luxury artificial jewelry at wholesale prices. 
                             Elevate your collection with our exquisite designs.
                         </p>
-                        <div className="flex space-x-4">
-                            <a href="#" className="w-10 h-10 border border-gold-400/20 flex items-center justify-center text-gold-400 hover:bg-gold-400 hover:text-dark-900 transition-all duration-300">
-                                <FiInstagram />
+                        <div className="flex space-x-3">
+                            <a
+                                href="https://instagram.com/ellitebling"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Follow Ellite Bling on Instagram"
+                                className="w-10 h-10 border border-gold-400/20 flex items-center justify-center text-gold-400 hover:bg-gold-400 hover:text-dark-900 transition-all duration-300"
+                            >
+                                <FiInstagram size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 border border-gold-400/20 flex items-center justify-center text-gold-400 hover:bg-gold-400 hover:text-dark-900 transition-all duration-300">
-                                <FiFacebook />
+                            <a
+                                href="https://facebook.com/ellitebling"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Follow Ellite Bling on Facebook"
+                                className="w-10 h-10 border border-gold-400/20 flex items-center justify-center text-gold-400 hover:bg-gold-400 hover:text-dark-900 transition-all duration-300"
+                            >
+                                <FiFacebook size={18} />
+                            </a>
+                            <a
+                                href="https://wa.me/923290987690?text=Hello%20Ellite%20Bling%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewelry%20collection."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Contact Ellite Bling on WhatsApp"
+                                className="w-10 h-10 border border-gold-400/20 flex items-center justify-center text-gold-400 hover:bg-gold-400 hover:text-dark-900 transition-all duration-300"
+                            >
+                                <FaWhatsapp size={18} />
                             </a>
                         </div>
                     </div>
@@ -78,15 +100,23 @@ const Footer = () => {
                         <ul className="space-y-4">
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiMail className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">ellitebling@gmail.com</span>
+                                <a href="mailto:ellitebling@gmail.com" className="text-sm hover:text-gold-400 transition-colors">ellitebling@gmail.com</a>
+                            </li>
+                            <li className="flex items-start space-x-3 text-dark-300">
+                                <FaWhatsapp className="text-gold-400 mt-1 shrink-0" />
+                                <a href="https://wa.me/923290987690?text=Hello%20Ellite%20Bling%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewelry%20collection." target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gold-400 transition-colors">
+                                    03290987690 (WhatsApp)
+                                </a>
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiPhone className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">+923290987690</span>
+                                <a href="tel:+923290987690" className="text-sm hover:text-gold-400 transition-colors">
+                                    +92 329 0987690
+                                </a>
                             </li>
                             <li className="flex items-start space-x-3 text-dark-300">
                                 <FiMapPin className="text-gold-400 mt-1 shrink-0" />
-                                <span className="text-sm">House#43, Street#2, Extension Gulzar e Quaid Champion Colony , Rawalpindi</span>
+                                <span className="text-sm">House#43, Street#2, Extension Gulzar e Quaid Champion Colony, Rawalpindi</span>
                             </li>
                         </ul>
                     </div>

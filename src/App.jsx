@@ -17,6 +17,7 @@ import PaymentFailure from './pages/PaymentFailure'
 import PaymentComplete from './pages/PaymentComplete'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
+import WhatsAppButton from './components/WhatsAppButton'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import RefundPolicy from './pages/RefundPolicy'
 import ShippingPolicy from './pages/ShippingPolicy'
@@ -56,6 +57,7 @@ function App() {
                     />
                 </Routes>
             </main>
+            <WhatsAppButton />
             <Footer />
         </div>
     )

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { supabase } from '../supabase/client'
 import ProductCard from '../components/ProductCard'
+import SEO from '../components/SEO'
+import { defaultProducts } from '../data/products'
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi'
 
 const Products = () => {
@@ -31,10 +33,14 @@ const Products = () => {
                 .select('*')
                 .order('created_at', { ascending: false })
 
-            if (error) throw error
-            setProducts(data || [])
+            if (error || !data || data.length === 0) {
+                setProducts(defaultProducts)
+            } else {
+                setProducts(data)
+            }
         } catch (error) {
-            console.error('Error fetching products:', error)
+            console.warn('Using local product catalog fallback:', error)
+            setProducts(defaultProducts)
         } finally {
             setLoading(false)
         }
@@ -46,11 +52,16 @@ const Products = () => {
                 .from('products')
                 .select('category')
 
-            if (error) throw error
-            const uniqueCategories = [...new Set(data.map(item => item.category))]
-            setCategories(uniqueCategories)
+            if (error || !data || data.length === 0) {
+                const uniqueCategories = [...new Set(defaultProducts.map(item => item.category))]
+                setCategories(uniqueCategories)
+            } else {
+                const uniqueCategories = [...new Set(data.map(item => item.category))]
+                setCategories(uniqueCategories)
+            }
         } catch (error) {
-            console.error('Error fetching categories:', error)
+            const uniqueCategories = [...new Set(defaultProducts.map(item => item.category))]
+            setCategories(uniqueCategories)
         }
     }
 
@@ -65,6 +76,11 @@ const Products = () => {
 
     return (
         <div className="whitespace-section">
+            <SEO
+                title="All Jewelry Products - Wholesale Collection"
+                description="Explore our entire collection of luxury artificial jewelry in Pakistan. Necklaces, bridal sets, earrings, rings, and bracelets at wholesale prices."
+                canonical="https://ellitebling.com/products"
+            />
             <div className="container-custom">
                 {/* Header */}
                 <div className="text-center mb-16">

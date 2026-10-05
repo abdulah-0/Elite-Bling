@@ -1,9 +1,15 @@
 import React from 'react'
+import SEO from '../components/SEO'
 import { FiRefreshCw, FiAlertTriangle, FiCheckCircle, FiDollarSign } from 'react-icons/fi'
 
 const RefundPolicy = () => {
     return (
         <div className="bg-dark-800 text-ivory min-h-screen py-16 md:py-24 animate-fade-in">
+            <SEO
+                title="Return & Refund Policy"
+                description="Review Ellite Bling's 7-day return, exchange, and refund guidelines for luxury artificial jewelry retail and wholesale orders."
+                canonical="https://ellitebling.com/refund-policy"
+            />
             <div className="container-custom">
                 {/* Header Section */}
                 <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in-up">
@@ -107,8 +113,11 @@ const RefundPolicy = () => {
                     {/* Contact Info */}
                     <div className="text-center pt-8 text-dark-300">
                         <p className="mb-2">For any questions or support regarding returns, reach out to our team at:</p>
-                        <p className="text-gold-400 font-semibold font-heading">ellitebling@gmail.com | +923290987690</p>
-                        <p className="text-xs text-dark-400 mt-4">Last Updated: July 10, 2026</p>
+                        <p className="text-gold-400 font-semibold font-heading mb-1">
+                            <a href="mailto:ellitebling@gmail.com" className="hover:underline">ellitebling@gmail.com</a> | <a href="https://wa.me/923290987690" target="_blank" rel="noopener noreferrer" className="hover:underline">WhatsApp: 03290987690</a>
+                        </p>
+                        <p className="text-xs text-dark-400">House#43, Street#2, Extension Gulzar e Quaid Champion Colony, Rawalpindi</p>
+                        <p className="text-xs text-dark-500 mt-3">Last Updated: October 5, 2026</p>
                     </div>
                 </div>
             </div>

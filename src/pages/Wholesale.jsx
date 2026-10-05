@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import { FiShield, FiTruck, FiAward, FiDollarSign, FiUsers, FiStar, FiCheck, FiChevronDown } from 'react-icons/fi'
 
 const Wholesale = () => {
@@ -50,6 +51,11 @@ const Wholesale = () => {
 
     return (
         <div>
+            <SEO
+                title="Wholesale Jewelry Program - Bulk Reseller Rates"
+                description="Join Ellite Bling's wholesale program. Tiered volume discounts up to 30%, dedicated support, and fast nationwide delivery for boutiques & resellers across Pakistan."
+                canonical="https://ellitebling.com/wholesale"
+            />
             {/* Hero */}
             <section className="relative min-h-[60vh] flex items-center bg-dark-900 overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.08)_0%,transparent_70%)]" />
@@ -210,6 +216,29 @@ const Wholesale = () => {
                             </button>
                         </form>
                     )}
+                    {/* Direct Contact Banner */}
+                    <div className="mt-12 text-center p-8 border border-gold-400/20 bg-dark-800/80 max-w-xl mx-auto">
+                        <h2 className="text-lg font-heading font-semibold text-ivory mb-2">Need Immediate Wholesale Assistance?</h2>
+                        <p className="text-dark-300 text-sm mb-4">
+                            Connect with our dedicated wholesale manager via WhatsApp or email for instant catalog access and custom quotes.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <a
+                                href="https://wa.me/923290987690?text=Hello%20Ellite%20Bling%2C%20I%20am%20interested%20in%20becoming%20a%20wholesale%20partner."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-primary py-2.5 px-6 text-xs inline-flex items-center gap-2"
+                            >
+                                WhatsApp: 03290987690
+                            </a>
+                            <a
+                                href="mailto:ellitebling@gmail.com"
+                                className="btn-secondary py-2.5 px-6 text-xs"
+                            >
+                                ellitebling@gmail.com
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
