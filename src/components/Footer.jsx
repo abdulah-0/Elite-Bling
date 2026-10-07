@@ -131,6 +131,7 @@ const Footer = () => {
                         <Link to="/privacy-policy" className="hover:text-gold-400 transition-colors">Privacy Policy</Link>
                         <Link to="/terms-conditions" className="hover:text-gold-400 transition-colors">Terms & Conditions</Link>
                         <Link to="/shipping-policy" className="hover:text-gold-400 transition-colors">Shipping Policy</Link>
+                        <Link to="/cancellation-policy" className="hover:text-gold-400 transition-colors">Cancellation Policy</Link>
                         <Link to="/refund-policy" className="hover:text-gold-400 transition-colors">Returns & Refunds</Link>
                     </div>
                     <div className="flex items-center space-x-6 text-sm text-dark-400 order-2 lg:order-3">

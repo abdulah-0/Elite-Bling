@@ -22,6 +22,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import RefundPolicy from './pages/RefundPolicy'
 import ShippingPolicy from './pages/ShippingPolicy'
 import TermsConditions from './pages/TermsConditions'
+import CancellationPolicy from './pages/CancellationPolicy'
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
                     <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                    <Route path="/cancellation-policy" element={<CancellationPolicy />} />
                     <Route path="/terms-conditions" element={<TermsConditions />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
