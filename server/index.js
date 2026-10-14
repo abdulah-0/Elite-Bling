@@ -2,15 +2,21 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import { createClient } from '@supabase/supabase-js'
+import { createSwichRouter, createOrderRouter, createCronRouter } from './routes/swich.js'
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_ANON_KEY
-)
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Swich PayIn routes
+app.use('/api/payments/swich', createSwichRouter(supabase))
+app.use('/api/orders', createOrderRouter(supabase))
+app.use('/api/cron', createCronRouter(supabase))
 
 // Rapid Gateway OAuth token
 async function getAccessToken() {
@@ -127,6 +133,10 @@ app.patch('/api/order/:id/status', async (req, res) => {
 })
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Ellite Bling server running on port ${PORT}`)
-})
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Ellite Bling server running on port ${PORT}`)
+  })
+}
+
+export default app

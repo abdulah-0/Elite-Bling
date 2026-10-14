@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../supabase/client'
-import { FiCheck, FiShield, FiTruck, FiLock, FiCreditCard } from 'react-icons/fi'
+import { FiCheck, FiShield, FiTruck, FiLock, FiCreditCard, FiGlobe } from 'react-icons/fi'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -12,6 +12,18 @@ const Checkout = () => {
     const [loading, setLoading] = useState(false)
     const [step, setStep] = useState(1)
     const [paymentMethod, setPaymentMethod] = useState('cod')
+    const [swichConfig, setSwichConfig] = useState(null)
+
+    useEffect(() => {
+        fetch('/api/payments/swich/config')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.enabled) {
+                    setSwichConfig(data)
+                }
+            })
+            .catch(err => console.error('Failed to load Swich config:', err))
+    }, [])
     const [formData, setFormData] = useState({
         fullName: '',
         email: user?.email || '',
@@ -94,10 +106,58 @@ const Checkout = () => {
         }
     }
 
+    const handleSwichPayment = async () => {
+        const cleanedPhone = (formData.phone || '').replace(/\D/g, '')
+        const isValidPhone = /^(03\d{9}|923\d{9}|3\d{9})$/.test(cleanedPhone)
+        if (!isValidPhone) {
+            alert('Please enter a valid Pakistani mobile number starting with 03 (e.g. 03001234567) for online payment.')
+            return
+        }
+
+        setLoading(true)
+        try {
+            const { data, error } = await supabase
+                .from('orders')
+                .insert([{
+                    user_id: user?.id || null,
+                    order_items: cart,
+                    total_price: getCartTotal(),
+                    status: 'pending',
+                    payment_status: 'unpaid',
+                    shipping_info: formData
+                }])
+                .select()
+
+            if (error) throw error
+
+            const res = await fetch('/api/payments/swich/initiate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderId: data[0].id,
+                }),
+            })
+
+            const initData = await res.json()
+            if (res.ok && initData.redirectUrl) {
+                window.location.href = initData.redirectUrl
+            } else {
+                alert(initData.error || 'Failed to initiate online payment. Please try again.')
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error('Swich payment error:', error)
+            alert(error.message || 'Failed to process payment. Please try again.')
+            setLoading(false)
+        }
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (paymentMethod === 'cod') {
             handleCodOrder()
+        } else if (paymentMethod === 'swich') {
+            handleSwichPayment()
         } else {
             handleCardPayment()
         }
@@ -229,11 +289,46 @@ const Checkout = () => {
                                                 <p className="text-sm text-dark-400 mt-1">Pay securely via Rapid Gateway (Visa / Mastercard)</p>
                                             </div>
                                         </label>
+                                        {/* Swich PayIn Option */}
+                                        {swichConfig?.enabled && (
+                                            (getCartTotal() >= swichConfig.minAmount && getCartTotal() <= swichConfig.maxAmount) ? (
+                                                <label className={`flex items-start p-4 border cursor-pointer transition-all duration-300 ${paymentMethod === 'swich' ? 'border-gold-400 bg-gold-400/5' : 'border-gold-400/20 hover:border-gold-400/40'}`}>
+                                                    <input
+                                                        type="radio"
+                                                        name="paymentMethod"
+                                                        value="swich"
+                                                        checked={paymentMethod === 'swich'}
+                                                        onChange={() => setPaymentMethod('swich')}
+                                                        className="sr-only"
+                                                    />
+                                                    <div className={`w-5 h-5 mt-0.5 border-2 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'swich' ? 'border-gold-400' : 'border-dark-500'}`}>
+                                                        {paymentMethod === 'swich' && <div className="w-2.5 h-2.5 bg-gold-400 rounded-full" />}
+                                                    </div>
+                                                    <div className="ml-4">
+                                                        <div className="flex items-center space-x-2">
+                                                            <FiGlobe className="text-gold-400" />
+                                                            <p className="font-medium text-ivory">Pay Online — Cards, Wallets, Bank (Swich)</p>
+                                                        </div>
+                                                        <p className="text-sm text-dark-400 mt-1">Instant & secure via Cards, Easypaisa, JazzCash, or Bank Account</p>
+                                                    </div>
+                                                </label>
+                                            ) : (
+                                                <div className="p-3 border border-gold-400/20 bg-dark-900/50 rounded text-xs text-dark-300">
+                                                    Online payment supports orders between PKR {swichConfig.minAmount.toLocaleString()} and PKR {swichConfig.maxAmount.toLocaleString()}. Please choose another payment method.
+                                                </div>
+                                            )
+                                        )}
                                     </div>
                                 </div>
 
                                 <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
-                                    {loading ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
+                                    {loading
+                                        ? 'Processing...'
+                                        : paymentMethod === 'swich'
+                                        ? `Pay PKR ${getCartTotal().toLocaleString()}`
+                                        : paymentMethod === 'cod'
+                                        ? 'Place Order'
+                                        : 'Pay Now'}
                                 </button>
                             </div>
                         </form>

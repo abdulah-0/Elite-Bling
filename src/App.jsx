@@ -23,6 +23,7 @@ import RefundPolicy from './pages/RefundPolicy'
 import ShippingPolicy from './pages/ShippingPolicy'
 import TermsConditions from './pages/TermsConditions'
 import CancellationPolicy from './pages/CancellationPolicy'
+import PaymentReturn from './pages/PaymentReturn'
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/products/:id" element={<ProductDetails />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/checkout/payment-return" element={<PaymentReturn />} />
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/wholesale" element={<Wholesale />} />
