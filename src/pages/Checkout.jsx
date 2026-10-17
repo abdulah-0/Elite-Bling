@@ -40,26 +40,55 @@ const Checkout = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
+    const createOrder = async (extra = {}) => {
+        // 1. Try server-side endpoint first (uses Supabase service-role key, bypasses RLS)
+        try {
+            const res = await fetch('/api/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: user?.id || null,
+                    cart,
+                    total_price: getCartTotal(),
+                    shipping_info: formData,
+                    payment_status: extra.payment_status || 'unpaid',
+                }),
+            })
+
+            if (res.ok) {
+                const data = await res.json()
+                if (data.order) return data.order
+            }
+        } catch (apiErr) {
+            console.warn('API create-order network error, attempting direct client insert:', apiErr)
+        }
+
+        // 2. Direct client Supabase fallback
+        const { data, error } = await supabase
+            .from('orders')
+            .insert([{
+                user_id: user?.id || null,
+                order_items: cart,
+                total_price: getCartTotal(),
+                status: 'pending',
+                payment_status: extra.payment_status || 'unpaid',
+                shipping_info: formData
+            }])
+            .select()
+
+        if (error) throw error
+        return data[0]
+    }
+
     const handleCodOrder = async () => {
         setLoading(true)
         try {
-            const { data, error } = await supabase
-                .from('orders')
-                .insert([{
-                    user_id: user?.id || null,
-                    order_items: cart,
-                    total_price: getCartTotal(),
-                    status: 'pending',
-                    shipping_info: formData
-                }])
-                .select()
-
-            if (error) throw error
+            const order = await createOrder({ payment_status: 'unpaid' })
             clearCart()
-            navigate('/order-success', { state: { order: data[0] } })
+            navigate('/order-success', { state: { order } })
         } catch (error) {
             console.error('Error creating order:', error)
-            alert('Failed to place order. Please try again.')
+            alert(error.message || 'Failed to place order. Please try again.')
         } finally {
             setLoading(false)
         }
@@ -68,18 +97,7 @@ const Checkout = () => {
     const handleCardPayment = async () => {
         setLoading(true)
         try {
-            const { data, error } = await supabase
-                .from('orders')
-                .insert([{
-                    user_id: user?.id || null,
-                    order_items: cart,
-                    total_price: getCartTotal(),
-                    status: 'pending',
-                    shipping_info: formData
-                }])
-                .select()
-
-            if (error) throw error
+            const order = await createOrder({ payment_status: 'unpaid' })
 
             const res = await fetch('/api/create-payment', {
                 method: 'POST',
@@ -88,7 +106,7 @@ const Checkout = () => {
                     amount: getCartTotal(),
                     phone: formData.phone,
                     email: formData.email,
-                    orderId: data[0].id,
+                    orderId: order.id,
                 }),
             })
 
@@ -100,7 +118,7 @@ const Checkout = () => {
             }
         } catch (error) {
             console.error('Payment error:', error)
-            alert('Failed to process payment. Please try again.')
+            alert(error.message || 'Failed to process payment. Please try again.')
         } finally {
             setLoading(false)
         }
@@ -116,25 +134,13 @@ const Checkout = () => {
 
         setLoading(true)
         try {
-            const { data, error } = await supabase
-                .from('orders')
-                .insert([{
-                    user_id: user?.id || null,
-                    order_items: cart,
-                    total_price: getCartTotal(),
-                    status: 'pending',
-                    payment_status: 'unpaid',
-                    shipping_info: formData
-                }])
-                .select()
-
-            if (error) throw error
+            const order = await createOrder({ payment_status: 'unpaid' })
 
             const res = await fetch('/api/payments/swich/initiate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    orderId: data[0].id,
+                    orderId: order.id,
                 }),
             })
 

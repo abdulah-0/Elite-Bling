@@ -80,10 +80,10 @@ app.post('/api/create-payment', async (req, res) => {
   }
 })
 
-// POST /api/create-order — creates order in Supabase (used for card payments)
+// POST /api/create-order — creates order in Supabase (service-role client, bypasses client RLS)
 app.post('/api/create-order', async (req, res) => {
   try {
-    const { user_id, cart, total_price, shipping_info } = req.body
+    const { user_id, cart, total_price, shipping_info, payment_status } = req.body
 
     const { data, error } = await supabase
       .from('orders')
@@ -92,15 +92,19 @@ app.post('/api/create-order', async (req, res) => {
         order_items: cart,
         total_price,
         status: 'pending',
+        payment_status: payment_status || 'unpaid',
         shipping_info,
       }])
       .select()
 
-    if (error) throw error
+    if (error) {
+      console.error('Create order DB error:', error)
+      return res.status(500).json({ error: error.message || 'Failed to create order' })
+    }
     res.json({ order: data[0] })
   } catch (err) {
     console.error('Create order error:', err)
-    res.status(500).json({ error: 'Failed to create order' })
+    res.status(500).json({ error: err.message || 'Failed to create order' })
   }
 })
 
