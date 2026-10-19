@@ -17,6 +17,7 @@ const envSchema = z.object({
   SWICH_MAX_AMOUNT: z.coerce.number().default(50000),
   SWICH_ATTEMPT_TTL_MINUTES: z.coerce.number().default(60),
   SWICH_TRANSACTION_TYPE: z.string().optional(),
+  SWICH_PWA_ONLY: z.string().optional().default('true').transform((v) => v === 'true'),
   BASE_URL: z.string().optional().default('http://localhost:3000'),
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
   CRON_SECRET: z.string().optional(),
@@ -66,6 +67,7 @@ export function getSwichConfig(env = process.env) {
     maxAmount: parsed.SWICH_MAX_AMOUNT,
     attemptTtlMinutes: parsed.SWICH_ATTEMPT_TTL_MINUTES,
     transactionType: parsed.SWICH_TRANSACTION_TYPE,
+    pwaOnly: parsed.SWICH_PWA_ONLY,
     siteUrl: siteUrl.replace(/\/$/, ''),
     cronSecret: parsed.CRON_SECRET,
   }

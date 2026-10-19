@@ -281,9 +281,9 @@ export async function handleCallback({ query, rawQuery = '', supabase, config = 
   // Map status
   const mappedStatus = mapSwichStatus(Status) || 'needs_review'
 
-  // 5. If Status maps to 'paid', verify with Inquire (defense-in-depth)
+  // 5. If Status maps to 'paid', verify with Inquire if not in PWA-only mode
   let confirmedStatus = mappedStatus
-  if (mappedStatus === 'paid') {
+  if (mappedStatus === 'paid' && !config.pwaOnly && config.clientSecret) {
     try {
       const inquireRes = await inquireByCustomerTransactionId(CustomerTransactionId, config)
       if (inquireRes.success && inquireRes.transactionStatus) {
@@ -480,25 +480,30 @@ export async function reconcilePendingAttempts({ supabase, config = getSwichConf
 
   for (const attempt of attempts) {
     try {
-      const inq = await inquireByCustomerTransactionId(attempt.customer_transaction_id, config)
       const now = new Date()
       const isPastTtl = attempt.expires_at && now > new Date(attempt.expires_at)
 
-      if (inq.success && inq.transactionStatus) {
-        const mapped = mapSwichStatus(inq.transactionStatus)
-        if (mapped && mapped !== attempt.status) {
-          await supabase.rpc('apply_payment_status', {
-            p_customer_transaction_id: attempt.customer_transaction_id,
-            p_new_status: mapped,
-            p_provider_status: inq.transactionStatus,
-            p_provider_code: inq.code,
-            p_provider_message: inq.message,
-            p_swich_order_id: inq.swichOrderId,
-            p_amount: inq.amount,
-          })
-          reconciledCount++
+      if (!config.pwaOnly && config.clientSecret) {
+        const inq = await inquireByCustomerTransactionId(attempt.customer_transaction_id, config)
+        if (inq.success && inq.transactionStatus) {
+          const mapped = mapSwichStatus(inq.transactionStatus)
+          if (mapped && mapped !== attempt.status) {
+            await supabase.rpc('apply_payment_status', {
+              p_customer_transaction_id: attempt.customer_transaction_id,
+              p_new_status: mapped,
+              p_provider_status: inq.transactionStatus,
+              p_provider_code: inq.code,
+              p_provider_message: inq.message,
+              p_swich_order_id: inq.swichOrderId,
+              p_amount: inq.amount,
+            })
+            reconciledCount++
+            continue
+          }
         }
-      } else if (isPastTtl) {
+      }
+
+      if (isPastTtl) {
         // Expired past TTL with no success reported
         await supabase.rpc('apply_payment_status', {
           p_customer_transaction_id: attempt.customer_transaction_id,
