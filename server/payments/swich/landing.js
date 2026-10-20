@@ -52,14 +52,31 @@ export function buildLandingGetUrl(config, {
   email,
   phone,
   publicPaymentRef,
+  billReferenceNo: customBillRef,
 }) {
   if (!config.clientId) throw new Error('clientId is required')
   if (!customerTransactionId) throw new Error('customerTransactionId is required')
 
   const cleanOrderNumber = String(orderNumber).replace(/[^A-Za-z0-9]/g, '')
-  const item = `Item_${cleanOrderNumber}`
-  const description = `Payment_${cleanOrderNumber}`
-  const billReferenceNo = `PK${cleanOrderNumber}`
+  const numericOnly = cleanOrderNumber.replace(/\D/g, '')
+
+  // 1Bill (OneBill) requires strictly numeric consumer numbers after 'PK'
+  let billReferenceNo = customBillRef
+  if (!billReferenceNo) {
+    if (numericOnly.length >= 4) {
+      billReferenceNo = `PK${numericOnly}`
+    } else {
+      const now = new Date()
+      const pad = (n, len = 2) => String(n).padStart(len, '0')
+      const ts = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(now.getUTCDate())}${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}`
+      const rand4 = pad(Math.floor(Math.random() * 10000), 4)
+      billReferenceNo = `PK${ts}${rand4}`
+    }
+  }
+
+  const itemSuffix = numericOnly.slice(0, 10) || cleanOrderNumber.slice(0, 10) || '9245'
+  const item = `Item_${itemSuffix}`
+  const description = `Payment_${itemSuffix}`
   const sanitizedPayee = (payeeName || 'Customer').replace(/[^A-Za-z0-9_]/g, '_').replace(/_+/g, '_').slice(0, 50)
 
   // In Swich's live format: integer amounts are sent without decimals (e.g. 2, 2600), decimals if fractional

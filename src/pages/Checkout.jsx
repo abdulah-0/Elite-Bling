@@ -313,9 +313,10 @@ const Checkout = () => {
                                                     <div className="ml-4">
                                                         <div className="flex items-center space-x-2">
                                                             <FiGlobe className="text-gold-400" />
-                                                            <p className="font-medium text-ivory">Pay Online — Cards, Wallets, Bank (Swich)</p>
+                                                            <p className="font-medium text-ivory">OneBill & Wallets (Swich PayIn)</p>
+                                                            <span className="text-[10px] bg-gold-400/20 text-gold-300 px-2 py-0.5 rounded border border-gold-400/30">1Bill / 1Link</span>
                                                         </div>
-                                                        <p className="text-sm text-dark-400 mt-1">Instant & secure via Cards, Easypaisa, JazzCash, or Bank Account</p>
+                                                        <p className="text-sm text-dark-400 mt-1">Pay via 1Bill (1Link Invoice/Voucher via any Pakistani Bank App / ATM) or Wallets (Easypaisa, JazzCash)</p>
                                                     </div>
                                                 </label>
                                             ) : (
@@ -331,7 +332,7 @@ const Checkout = () => {
                                     {loading
                                         ? 'Processing...'
                                         : paymentMethod === 'swich'
-                                        ? `Pay PKR ${getCartTotal().toLocaleString()}`
+                                        ? `Pay via OneBill / Wallets (PKR ${getCartTotal().toLocaleString()})`
                                         : paymentMethod === 'cod'
                                         ? 'Place Order'
                                         : 'Pay Now'}
