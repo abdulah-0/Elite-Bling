@@ -100,45 +100,9 @@ export async function initiatePayment({ orderId, user, supabase, config = getSwi
       .eq('id', order.id)
   }
 
-  // 4. Reuse rule (§8.2 step 4)
-  const now = new Date()
-  const { data: existingAttempts } = await supabase
-    .from('payment_attempts')
-    .select('*')
-    .eq('order_id', order.id)
-    .in('status', ['initiated', 'redirected', 'pending'])
-    .order('created_at', { ascending: false })
-    .limit(1)
-
-  const activeAttempt = existingAttempts?.[0]
-  if (activeAttempt && activeAttempt.expires_at) {
-    const expiresAt = new Date(activeAttempt.expires_at)
-    const marginMs = 5 * 60 * 1000
-    if (now.getTime() < expiresAt.getTime() - marginMs) {
-      logger.info('Reusing active payment attempt for order', {
-        orderId: order.id,
-        customerTransactionId: activeAttempt.customer_transaction_id,
-      })
-
-      const redirectUrl = buildLandingGetUrl(config, {
-        customerTransactionId: activeAttempt.customer_transaction_id,
-        orderNumber: order.id.slice(0, 8).toUpperCase(),
-        amount: computedAmount,
-        payeeName,
-        email,
-        phone,
-        publicPaymentRef,
-      })
-
-      return {
-        redirectUrl,
-        customerTransactionId: activeAttempt.customer_transaction_id,
-        reused: true,
-      }
-    }
-  }
-
-  // 5. Create fresh payment attempt (32-char UUID hex, max 50 chars)
+  // 4. Create fresh payment attempt (32-char UUID hex, max 50 chars).
+  // Note: Swich invalidates/consumes transaction IDs once initiated or visited.
+  // Reusing IDs leads to Swich returning /Transaction/NotFound (404), so every checkout attempt generates a fresh ID.
   const customerTransactionId = randomUUID().replace(/-/g, '')
   const expiresAt = new Date(Date.now() + config.attemptTtlMinutes * 60 * 1000).toISOString()
 

@@ -183,7 +183,7 @@ test('Swich service integration tests', async (t) => {
     assert.equal(stored.status, 'redirected')
   })
 
-  await t.test('initiatePayment reuses active attempt on rapid second click', async () => {
+  await t.test('initiatePayment generates fresh attempt ID on second click to avoid Swich 404s', async () => {
     const res2 = await initiatePayment({
       orderId: 'order-1',
       user: { id: 'user-1' },
@@ -191,7 +191,8 @@ test('Swich service integration tests', async (t) => {
       config,
     })
 
-    assert.equal(res2.reused, true)
+    assert.equal(res2.reused, false)
+    assert.ok(res2.customerTransactionId)
   })
 
   await t.test('initiatePayment rejects unauthorized user', async () => {
