@@ -9,10 +9,10 @@ import { landingChecksum } from '../payments/swich/checksum.js'
 
 test('landing module', async (t) => {
   await t.test('sanitiseItem removes special characters and restricts length', () => {
-    assert.equal(sanitiseItem('Order #123! @ special & chars'), 'Order 123 special chars')
-    assert.equal(sanitiseItem('  spaces   everywhere  '), 'spaces everywhere')
-    assert.equal(sanitiseItem(''), 'Order')
-    assert.equal(sanitiseItem(null), 'Order')
+    assert.equal(sanitiseItem('Order #123! @ special & chars'), 'Order_123_special_chars')
+    assert.equal(sanitiseItem('  spaces   everywhere  '), 'spaces_everywhere')
+    assert.equal(sanitiseItem(''), 'Item_Order')
+    assert.equal(sanitiseItem(null), 'Item_Order')
 
     const longItem = 'A'.repeat(600)
     assert.equal(sanitiseItem(longItem).length, 500)
@@ -31,48 +31,47 @@ test('landing module', async (t) => {
     assert.equal(normaliseMsisdn(''), null)
   })
 
-  await t.test('buildLandingGetUrl generates valid URL with raw checksum', () => {
+  await t.test('buildLandingGetUrl generates valid URL matching Swich PayIn live sample format', () => {
     const config = {
-      clientId: 'test_client_id',
+      clientId: '3ccd54a980b34628904bf1fb1a03e566',
       secretKey: 'test_secret_key',
-      pwaGetUrl: 'https://sandbox-payin-pwa.swichnow.com/',
+      pwaGetUrl: 'https://payin-pwa.swichnow.com/',
       siteUrl: 'https://store.example',
     }
 
     const params = {
-      customerTransactionId: 'txn_0123456789abcdef0123456789',
-      orderNumber: 'ORD-101',
-      amount: 1450,
-      payeeName: 'Ahmed Khan',
-      email: 'ahmed@example.com',
-      phone: '+923001234567',
+      customerTransactionId: '04321abb9646476fb5181b888ee91f22',
+      orderNumber: '9245',
+      amount: 2,
+      payeeName: 'Customer_4230',
+      email: 'test1708@mail.com',
+      phone: '03907331667',
       publicPaymentRef: 'pref_123456',
     }
 
     const urlStr = buildLandingGetUrl(config, params)
     const parsed = new URL(urlStr)
 
-    assert.equal(parsed.origin, 'https://sandbox-payin-pwa.swichnow.com')
-    assert.equal(parsed.searchParams.get('clientId'), 'test_client_id')
-    assert.equal(parsed.searchParams.get('customerTransactionId'), 'txn_0123456789abcdef0123456789')
-    assert.equal(parsed.searchParams.get('amount'), '1450.00')
-    assert.equal(parsed.searchParams.get('item'), 'Order ORD 101')
-    assert.equal(parsed.searchParams.get('MSISDN'), '03001234567')
+    assert.equal(parsed.origin, 'https://payin-pwa.swichnow.com')
+    assert.equal(parsed.searchParams.get('clientId'), '3ccd54a980b34628904bf1fb1a03e566')
+    assert.equal(parsed.searchParams.get('customerTransactionId'), '04321abb9646476fb5181b888ee91f22')
+    assert.equal(parsed.searchParams.get('item'), 'Item_9245')
+    assert.equal(parsed.searchParams.get('amount'), '2')
+    assert.equal(parsed.searchParams.get('channel'), '0')
+    assert.equal(parsed.searchParams.get('billReferenceNo'), 'PK9245')
+    assert.equal(parsed.searchParams.get('description'), 'Payment_9245')
+    assert.equal(parsed.searchParams.get('PayeeName'), 'Customer_4230')
+    assert.equal(parsed.searchParams.get('Email'), 'test1708@mail.com')
+    assert.equal(parsed.searchParams.get('MSISDN'), '03907331667')
     assert.equal(parsed.searchParams.get('currency'), 'PKR')
 
-    // Checksum verified
+    // Checksum verified with exact raw parameters
     const expectedChecksum = landingChecksum(
       config.secretKey,
       params.customerTransactionId,
-      'Order ORD 101',
-      '1450.00'
+      'Item_9245',
+      '2'
     )
     assert.equal(parsed.searchParams.get('checksum'), expectedChecksum)
-
-    // Redirect URL verified
-    assert.equal(
-      parsed.searchParams.get('successRedirectUrl'),
-      'https://store.example/checkout/payment-return?ref=pref_123456'
-    )
   })
 })

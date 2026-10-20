@@ -6,9 +6,9 @@ import { landingChecksum } from './checksum.js'
  * Reference: docs/implementation.prd.md §4.3 & §8.2 step 5.
  */
 export function sanitiseItem(rawItem) {
-  if (!rawItem || typeof rawItem !== 'string') return 'Order'
-  const cleaned = rawItem.replace(/[^A-Za-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim()
-  return (cleaned || 'Order').slice(0, 500)
+  if (!rawItem || typeof rawItem !== 'string') return 'Item_Order'
+  const cleaned = rawItem.replace(/[^A-Za-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
+  return (cleaned || 'Item_Order').slice(0, 500)
 }
 
 /**
@@ -56,8 +56,16 @@ export function buildLandingGetUrl(config, {
   if (!config.clientId) throw new Error('clientId is required')
   if (!customerTransactionId) throw new Error('customerTransactionId is required')
 
-  const item = sanitiseItem(`Order ${orderNumber}`)
-  const amountStr = Number(amount).toFixed(2)
+  const cleanOrderNumber = String(orderNumber).replace(/[^A-Za-z0-9]/g, '')
+  const item = `Item_${cleanOrderNumber}`
+  const description = `Payment_${cleanOrderNumber}`
+  const billReferenceNo = `PK${cleanOrderNumber}`
+  const sanitizedPayee = (payeeName || 'Customer').replace(/[^A-Za-z0-9_]/g, '_').replace(/_+/g, '_').slice(0, 50)
+
+  // In Swich's live format: integer amounts are sent without decimals (e.g. 2, 2600), decimals if fractional
+  const numAmount = Number(amount)
+  const amountStr = numAmount % 1 === 0 ? String(Math.round(numAmount)) : numAmount.toFixed(2)
+
   const normalisedPhone = normaliseMsisdn(phone)
   if (!normalisedPhone) {
     throw new Error('Valid Pakistani mobile number (03xxxxxxxxx) is required')
@@ -66,28 +74,32 @@ export function buildLandingGetUrl(config, {
   // Compute checksum using raw un-encoded values
   const checksum = landingChecksum(config.secretKey, customerTransactionId, item, amountStr)
 
-  const successRedirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
+  // Construct query string in exact order matching Swich PayIn live sample
+  const params = new URLSearchParams()
+  params.set('clientId', config.clientId)
+  params.set('customerTransactionId', customerTransactionId)
+  params.set('item', item)
+  params.set('amount', amountStr)
+  params.set('channel', '0')
+  params.set('billReferenceNo', billReferenceNo)
+  params.set('description', description)
+  params.set('PayeeName', sanitizedPayee)
+  params.set('Email', email || '')
+  params.set('MSISDN', normalisedPhone)
+  params.set('currency', 'PKR')
+  params.set('checksum', checksum)
 
-  const url = new URL(config.pwaGetUrl)
-  url.searchParams.set('clientId', config.clientId)
-  url.searchParams.set('customerTransactionId', customerTransactionId)
-  url.searchParams.set('item', item)
-  url.searchParams.set('amount', amountStr)
-  url.searchParams.set('channel', '0')
-  url.searchParams.set('checksum', checksum)
-  url.searchParams.set('description', `Payment for order ${orderNumber}`)
-  url.searchParams.set('billReferenceNo', String(orderNumber))
-  url.searchParams.set('PayeeName', payeeName || 'Customer')
-  url.searchParams.set('Email', email || '')
-  url.searchParams.set('MSISDN', normalisedPhone)
-  url.searchParams.set('currency', 'PKR')
-  url.searchParams.set('successRedirectUrl', successRedirectUrl)
-
-  if (config.transactionType) {
-    url.searchParams.set('transactionType', config.transactionType)
+  if (publicPaymentRef && config.siteUrl) {
+    const successRedirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
+    params.set('successRedirectUrl', successRedirectUrl)
   }
 
-  return url.toString()
+  if (config.transactionType) {
+    params.set('transactionType', config.transactionType)
+  }
+
+  const base = config.pwaGetUrl.replace(/\/$/, '')
+  return `${base}?${params.toString()}`
 }
 
 /**

@@ -171,7 +171,7 @@ test('Swich service integration tests', async (t) => {
 
     assert.ok(res.redirectUrl)
     assert.match(res.redirectUrl, /sandbox-payin-pwa\.swichnow\.com/)
-    assert.match(res.redirectUrl, /amount=2500\.00/)
+    assert.match(res.redirectUrl, /amount=2500/)
     assert.match(res.redirectUrl, /MSISDN=03331234567/)
     assert.equal(res.customerTransactionId.length, 32)
     assert.equal(res.reused, false)
