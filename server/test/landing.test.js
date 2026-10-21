@@ -53,7 +53,9 @@ test('landing module', async (t) => {
     const parsed = new URL(urlStr)
 
     assert.equal(parsed.origin, 'https://payin-pwa.swichnow.com')
+    assert.equal(parsed.searchParams.get('clientid'), '3ccd54a980b34628904bf1fb1a03e566')
     assert.equal(parsed.searchParams.get('clientId'), '3ccd54a980b34628904bf1fb1a03e566')
+    assert.equal(parsed.searchParams.get('customertransactionid'), '04321abb9646476fb5181b888ee91f22')
     assert.equal(parsed.searchParams.get('customerTransactionId'), '04321abb9646476fb5181b888ee91f22')
     assert.equal(parsed.searchParams.get('item'), 'Item_9245')
     assert.equal(parsed.searchParams.get('amount'), '2')

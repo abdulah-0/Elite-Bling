@@ -91,20 +91,28 @@ export function buildLandingGetUrl(config, {
   // Compute checksum using raw un-encoded values
   const checksum = landingChecksum(config.secretKey, customerTransactionId, item, amountStr)
 
-  // Construct query string in exact order matching Swich PayIn live sample
+  // Construct query string matching Swich official spec & live sample
   const params = new URLSearchParams()
-  params.set('clientId', config.clientId)
-  params.set('customerTransactionId', customerTransactionId)
+
+  // 1. Core specification parameters (from Swich official documentation)
+  params.set('clientid', config.clientId)
+  params.set('customertransactionid', customerTransactionId)
   params.set('item', item)
   params.set('amount', amountStr)
   params.set('channel', '0')
+  params.set('checksum', checksum)
+
+  // 2. Compatibility aliases for sample URL parameter casing
+  params.set('clientId', config.clientId)
+  params.set('customerTransactionId', customerTransactionId)
+
+  // 3. Extended metadata parameters
   params.set('billReferenceNo', billReferenceNo)
   params.set('description', description)
   params.set('PayeeName', sanitizedPayee)
   params.set('Email', email || '')
   params.set('MSISDN', normalisedPhone)
   params.set('currency', 'PKR')
-  params.set('checksum', checksum)
 
   if (publicPaymentRef && config.siteUrl) {
     const successRedirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
