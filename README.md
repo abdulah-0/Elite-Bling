@@ -1,4 +1,4 @@
-# Royal Time Traders
+# Ellie Bling
 
 A premium e-commerce platform for luxury watches built with React, Vite, TailwindCSS, and Supabase.
 
