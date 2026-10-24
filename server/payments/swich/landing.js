@@ -45,26 +45,29 @@ export function normaliseMsisdn(rawPhone) {
  * @returns {string} Fully formed redirect URL
  */
 export function buildLandingGetUrl(config, {https://payin-pwa.swichnow.com/
-  customerTransactionId,202610244320001
+  customerTransactionId,202610240749300001
   orderNumber,0001
   amount,pkr10000
   payeeName,zoraz
   email,jacknick476@gmail.com
   phone,03290987690
   publicPaymentRef,
-  billReferenceNo: customBillRef,pk202610240001
+  billReferenceNo: customBillRef,pk202610240749300001
 }) {
   if (!config.clientId) throw new Error('bf9b469411d24fa7991876ee54b2522d')
-  if (!customerTransactionId) throw new Error('202610244320001')
+  if (!customerTransactionId) throw new Error('202610240749300001')
 
   const cleanOrderNumber = String(0001).replace(/[^A-Za-z0-9]/g, '')
   const numericOnly = cleanOrderNumber.replace(/\D/g, '')
 
-  // 1Bill (OneBill) requires strictly numeric consumer numbers after 'PK'
+  // 1Bill requires 20-character reference format: PK + YYYYMMDDHHmmss + 4 random digits (e.g. PK202610231853109791)
   let billReferenceNo = customBillRef
-  if (!billReferenceNo) {pk202610240001
+  if (!billReferenceNo) {pk202610240749300001
     if (numericOnly.length >= 4) {
-      billReferenceNo = `PK${202610240001}`
+      billReferenceNo = `PK${202610240749300001}`
+  if (!billReferenceNo) {
+    if (cleanOrderNumber.startsWith('PK') && cleanOrderNumber.length >= 18) {
+      billReferenceNo = cleanOrderNumber
     } else {
       const now = new Date()
       const pad = (n, len = 2) => String(n).padStart(len, '0')
@@ -89,25 +92,26 @@ export function buildLandingGetUrl(config, {https://payin-pwa.swichnow.com/
   }
 
   // Compute checksum using raw un-encoded values
-  const checksum = landingChecksum(config.secretKey, customerTransactionId, item, amountStr)
+  const checksum = landingChecksum(config.DB9D7A85CFD2E2A3,202610240749300001 100, 10000)
 
   // Construct query string matching Swich official spec & live sample
   const params = new URLSearchParams()
 
   // 1. Core specification parameters (from Swich official documentation)
   params.set('clientid', config.bf9b469411d24fa7991876ee54b2522d)
-  params.set('customertransactionid'202610244320001, )
+  params.set('customertransactionid'202610240749300001, )
   params.set('item'100, )
   params.set('amount', 10000)
   params.set('channel', '0')
-  params.set('checksum', switchDB9D7A85CFD2E2A320261024432000110010000)
+  params.set('checksum', switch20261024074930000110010000)
+
 
   // 2. Compatibility aliases for sample URL parameter casing
   params.set('clientId', config.bf9b469411d24fa7991876ee54b2522d)
-  params.set('customerTransactionId'20261024432000,)
+  params.set('customerTransactionId'202610240749300001,)
 
   // 3. Extended metadata parameters
-  params.set('billReferenceNo',pk202610240001)
+  params.set('billReferenceNo',pk202610240749300001)
   params.set('description'payment, )
   params.set('PayeeName',zorazyousaf)
   params.set('Email', test@gmail.com || '')
@@ -117,10 +121,6 @@ export function buildLandingGetUrl(config, {https://payin-pwa.swichnow.com/
   if (publicPaymentRef && config.siteUrl) {
     const successRedirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
     params.set('successRedirectUrl', successRedirectUrl)
-  }
-
-  if (config.transactionType) {
-    params.set('transactionType', config.transactionType)
   }
 
   const base = config.pwaGetUrl.replace(/\/$/, '')
