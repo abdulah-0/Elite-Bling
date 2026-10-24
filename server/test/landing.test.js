@@ -42,6 +42,7 @@ test('landing module', async (t) => {
     const params = {
       customerTransactionId: '04321abb9646476fb5181b888ee91f22',
       orderNumber: '9245',
+      billReferenceNo: 'PK202610231853109791',
       amount: 2,
       payeeName: 'Customer_4230',
       email: 'test1708@mail.com',
@@ -60,7 +61,8 @@ test('landing module', async (t) => {
     assert.equal(parsed.searchParams.get('item'), 'Item_9245')
     assert.equal(parsed.searchParams.get('amount'), '2')
     assert.equal(parsed.searchParams.get('channel'), '0')
-    assert.equal(parsed.searchParams.get('billReferenceNo'), 'PK9245')
+    assert.equal(parsed.searchParams.get('billReferenceNo'), 'PK202610231853109791')
+    assert.equal(parsed.searchParams.get('transactionType'), null)
     assert.equal(parsed.searchParams.get('description'), 'Payment_9245')
     assert.equal(parsed.searchParams.get('PayeeName'), 'Customer_4230')
     assert.equal(parsed.searchParams.get('Email'), 'test1708@mail.com')

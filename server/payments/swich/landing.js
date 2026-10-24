@@ -60,11 +60,11 @@ export function buildLandingGetUrl(config, {
   const cleanOrderNumber = String(orderNumber).replace(/[^A-Za-z0-9]/g, '')
   const numericOnly = cleanOrderNumber.replace(/\D/g, '')
 
-  // 1Bill (OneBill) requires strictly numeric consumer numbers after 'PK'
+  // 1Bill requires 20-character reference format: PK + YYYYMMDDHHmmss + 4 random digits (e.g. PK202610231853109791)
   let billReferenceNo = customBillRef
   if (!billReferenceNo) {
-    if (numericOnly.length >= 4) {
-      billReferenceNo = `PK${numericOnly}`
+    if (cleanOrderNumber.startsWith('PK') && cleanOrderNumber.length >= 18) {
+      billReferenceNo = cleanOrderNumber
     } else {
       const now = new Date()
       const pad = (n, len = 2) => String(n).padStart(len, '0')
@@ -117,10 +117,6 @@ export function buildLandingGetUrl(config, {
   if (publicPaymentRef && config.siteUrl) {
     const successRedirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
     params.set('successRedirectUrl', successRedirectUrl)
-  }
-
-  if (config.transactionType) {
-    params.set('transactionType', config.transactionType)
   }
 
   const base = config.pwaGetUrl.replace(/\/$/, '')
