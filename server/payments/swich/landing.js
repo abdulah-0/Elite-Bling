@@ -67,9 +67,11 @@ export function buildLandingGetUrl(config, {
       billReferenceNo = cleanOrderNumber
     } else {
       const now = new Date()
+      // Use Pakistan Standard Time (PKT, UTC+5)
+      const pktDate = new Date(now.getTime() + 5 * 60 * 60 * 1000)
       const pad = (n, len = 2) => String(n).padStart(len, '0')
-      const ts = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(now.getUTCDate())}${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}`
-      const rand4 = pad(Math.floor(Math.random() * 10000), 4)
+      const ts = `${pktDate.getUTCFullYear()}${pad(pktDate.getUTCMonth() + 1)}${pad(pktDate.getUTCDate())}${pad(pktDate.getUTCHours())}${pad(pktDate.getUTCMinutes())}${pad(pktDate.getUTCSeconds())}`
+      const rand4 = pad(Math.floor(1000 + Math.random() * 9000), 4)
       billReferenceNo = `PK${ts}${rand4}`
     }
   }
