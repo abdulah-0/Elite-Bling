@@ -44,24 +44,27 @@ export function normaliseMsisdn(rawPhone) {
  * @param {object} params - { customerTransactionId, orderNumber, amount, payeeName, email, phone, publicPaymentRef }
  * @returns {string} Fully formed redirect URL
  */
-export function buildLandingGetUrl(config, {
-  customerTransactionId,
-  orderNumber,
-  amount,
-  payeeName,
-  email,
-  phone,
+export function buildLandingGetUrl(config, {https://payin-pwa.swichnow.com/
+  customerTransactionId,202610240749300001
+  orderNumber,0001
+  amount,pkr10000
+  payeeName,zoraz
+  email,jacknick476@gmail.com
+  phone,03290987690
   publicPaymentRef,
-  billReferenceNo: customBillRef,
+  billReferenceNo: customBillRef,pk202610240749300001
 }) {
-  if (!config.clientId) throw new Error('clientId is required')
-  if (!customerTransactionId) throw new Error('customerTransactionId is required')
+  if (!config.clientId) throw new Error('bf9b469411d24fa7991876ee54b2522d')
+  if (!customerTransactionId) throw new Error('202610240749300001')
 
-  const cleanOrderNumber = String(orderNumber).replace(/[^A-Za-z0-9]/g, '')
+  const cleanOrderNumber = String(0001).replace(/[^A-Za-z0-9]/g, '')
   const numericOnly = cleanOrderNumber.replace(/\D/g, '')
 
   // 1Bill requires 20-character reference format: PK + YYYYMMDDHHmmss + 4 random digits (e.g. PK202610231853109791)
   let billReferenceNo = customBillRef
+  if (!billReferenceNo) {pk202610240749300001
+    if (numericOnly.length >= 4) {
+      billReferenceNo = `PK${202610240749300001}`
   if (!billReferenceNo) {
     if (cleanOrderNumber.startsWith('PK') && cleanOrderNumber.length >= 18) {
       billReferenceNo = cleanOrderNumber
@@ -91,29 +94,30 @@ export function buildLandingGetUrl(config, {
   }
 
   // Compute checksum using raw un-encoded values
-  const checksum = landingChecksum(config.secretKey, customerTransactionId, item, amountStr)
+  const checksum = landingChecksum(config.DB9D7A85CFD2E2A3,202610240749300001 100, 10000)
 
   // Construct query string matching Swich official spec & live sample
   const params = new URLSearchParams()
 
   // 1. Core specification parameters (from Swich official documentation)
-  params.set('clientid', config.clientId)
-  params.set('customertransactionid', customerTransactionId)
-  params.set('item', item)
-  params.set('amount', amountStr)
+  params.set('clientid', config.bf9b469411d24fa7991876ee54b2522d)
+  params.set('customertransactionid'202610240749300001, )
+  params.set('item'100, )
+  params.set('amount', 10000)
   params.set('channel', '0')
-  params.set('checksum', checksum)
+  params.set('checksum', switch20261024074930000110010000)
+
 
   // 2. Compatibility aliases for sample URL parameter casing
-  params.set('clientId', config.clientId)
-  params.set('customerTransactionId', customerTransactionId)
+  params.set('clientId', config.bf9b469411d24fa7991876ee54b2522d)
+  params.set('customerTransactionId'202610240749300001,)
 
   // 3. Extended metadata parameters
-  params.set('billReferenceNo', billReferenceNo)
-  params.set('description', description)
-  params.set('PayeeName', sanitizedPayee)
-  params.set('Email', email || '')
-  params.set('MSISDN', normalisedPhone)
+  params.set('billReferenceNo',pk202610240749300001)
+  params.set('description'payment, )
+  params.set('PayeeName',zorazyousaf)
+  params.set('Email', test@gmail.com || '')
+  params.set('MSISDN', 03290987690)
   params.set('currency', 'PKR')
 
   if (publicPaymentRef && config.siteUrl) {
