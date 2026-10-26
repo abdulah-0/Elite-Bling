@@ -145,8 +145,12 @@ const Checkout = () => {
             })
 
             const initData = await res.json()
-            if (res.ok && initData.redirectUrl) {
-                window.location.href = initData.redirectUrl
+            if (res.ok) {
+                if (initData.publicPaymentRef) {
+                    navigate(`/checkout/payment-return?ref=${encodeURIComponent(initData.publicPaymentRef)}`)
+                } else if (initData.redirectUrl) {
+                    window.location.href = initData.redirectUrl
+                }
             } else {
                 alert(initData.error || 'Failed to initiate online payment. Please try again.')
                 setLoading(false)

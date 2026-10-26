@@ -36,7 +36,8 @@ export async function getAccessToken(config, forceRefresh = false) {
         throw new Error('SWICH_CLIENT_ID and SWICH_CLIENT_SECRET are required')
       }
 
-      logger.info('Fetching Swich OAuth access token', { authUrl: config.authUrl })
+      const authUrl = config.authUrl || (config.env === 'production' ? 'https://auth.swichnow.com/connect/token' : 'https://sandbox-auth.swichnow.com/connect/token')
+      logger.info('Fetching Swich OAuth access token', { authUrl })
 
       const body = new URLSearchParams({
         grant_type: 'client_credentials',
@@ -44,7 +45,7 @@ export async function getAccessToken(config, forceRefresh = false) {
         client_secret: config.clientSecret,
       })
 
-      const res = await fetch(config.authUrl, {
+      const res = await fetch(authUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

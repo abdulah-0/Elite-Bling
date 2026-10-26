@@ -37,6 +37,23 @@ export function normaliseMsisdn(rawPhone) {
 }
 
 /**
+ * Generates 1Bill reference in standard format: PK + YYYYMMDDHHmmss + 4 random digits (20 chars total)
+ * Example: PK202610262055218069
+ */
+export function generateBillReferenceNo(cleanOrderNumber = '') {
+  const str = String(cleanOrderNumber).replace(/[^A-Za-z0-9]/g, '')
+  if (str.startsWith('PK') && str.length >= 18) {
+    return str
+  }
+  const now = new Date()
+  const pktDate = new Date(now.getTime() + 5 * 60 * 60 * 1000)
+  const pad = (n, len = 2) => String(n).padStart(len, '0')
+  const ts = `${pktDate.getUTCFullYear()}${pad(pktDate.getUTCMonth() + 1)}${pad(pktDate.getUTCDate())}${pad(pktDate.getUTCHours())}${pad(pktDate.getUTCMinutes())}${pad(pktDate.getUTCSeconds())}`
+  const rand4 = pad(Math.floor(1000 + Math.random() * 9000), 4)
+  return `PK${ts}${rand4}`
+}
+
+/**
  * Builds the Swich Hosted Landing Page GET URL.
  * Reference: docs/implementation.prd.md §4.3 & §8.3
  *
@@ -61,20 +78,7 @@ export function buildLandingGetUrl(config, {
   const numericOnly = cleanOrderNumber.replace(/\D/g, '')
 
   // 1Bill requires 20-character reference format: PK + YYYYMMDDHHmmss + 4 random digits (e.g. PK202610231853109791)
-  let billReferenceNo = customBillRef
-  if (!billReferenceNo) {
-    if (cleanOrderNumber.startsWith('PK') && cleanOrderNumber.length >= 18) {
-      billReferenceNo = cleanOrderNumber
-    } else {
-      const now = new Date()
-      // Use Pakistan Standard Time (PKT, UTC+5)
-      const pktDate = new Date(now.getTime() + 5 * 60 * 60 * 1000)
-      const pad = (n, len = 2) => String(n).padStart(len, '0')
-      const ts = `${pktDate.getUTCFullYear()}${pad(pktDate.getUTCMonth() + 1)}${pad(pktDate.getUTCDate())}${pad(pktDate.getUTCHours())}${pad(pktDate.getUTCMinutes())}${pad(pktDate.getUTCSeconds())}`
-      const rand4 = pad(Math.floor(1000 + Math.random() * 9000), 4)
-      billReferenceNo = `PK${ts}${rand4}`
-    }
-  }
+  const billReferenceNo = customBillRef || generateBillReferenceNo(cleanOrderNumber)
 
   const itemSuffix = numericOnly.slice(0, 10) || cleanOrderNumber.slice(0, 10) || '9245'
   const item = `Item_${itemSuffix}`

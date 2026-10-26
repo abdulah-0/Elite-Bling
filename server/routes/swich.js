@@ -92,7 +92,8 @@ export function createOrderRouter(supabase) {
   router.get('/:ref/payment-status', async (req, res) => {
     try {
       const { ref } = req.params
-      const statusData = await getPaymentStatusByRef({ ref, supabase })
+      const config = getSwichConfig()
+      const statusData = await getPaymentStatusByRef({ ref, supabase, config })
       res.json(statusData)
     } catch (err) {
       res.status(err.status || 500).json({ error: err.message || 'Failed to fetch status' })

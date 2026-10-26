@@ -1,7 +1,8 @@
 import { randomUUID, createHash } from 'node:crypto'
 import { getSwichConfig } from './config.js'
 import { verifyCallbackChecksum } from './checksum.js'
-import { buildLandingGetUrl, normaliseMsisdn, sanitiseItem } from './landing.js'
+import { buildLandingGetUrl, normaliseMsisdn, sanitiseItem, generateBillReferenceNo } from './landing.js'
+import { initiateBillerPayment } from './biller.js'
 import { mapSwichStatus, isTerminalStatus } from './status-map.js'
 import { inquireByCustomerTransactionId } from './inquire.js'
 import { logger } from './logger.js'
@@ -105,6 +106,8 @@ export async function initiatePayment({ orderId, user, supabase, config = getSwi
   // Reusing IDs leads to Swich returning /Transaction/NotFound (404), so every checkout attempt generates a fresh ID.
   const customerTransactionId = randomUUID().replace(/-/g, '')
   const expiresAt = new Date(Date.now() + config.attemptTtlMinutes * 60 * 1000).toISOString()
+  const isBiller = (config.paymentFlow || 'biller') === 'biller'
+  const method = isBiller ? 'biller' : 'landing_page'
 
   const { error: insertErr } = await supabase
     .from('payment_attempts')
@@ -115,7 +118,7 @@ export async function initiatePayment({ orderId, user, supabase, config = getSwi
       currency: 'PKR',
       status: 'initiated',
       provider: 'swich',
-      method: 'landing_page',
+      method,
       expires_at: expiresAt,
     }])
 
@@ -124,6 +127,95 @@ export async function initiatePayment({ orderId, user, supabase, config = getSwi
     const err = new Error('Could not initiate payment session')
     err.status = 500
     throw err
+  }
+
+  if (isBiller) {
+    const cleanOrderNumber = order.id.slice(0, 8).toUpperCase()
+    const billReferenceNo = generateBillReferenceNo(cleanOrderNumber)
+    const item = sanitiseItem(order.order_items?.[0]?.name || `Order_${cleanOrderNumber}`)
+
+    const billerRes = await initiateBillerPayment(config, {
+      customerTransactionId,
+      item,
+      amount: computedAmount,
+      msisdn: phone,
+      email,
+      billReferenceNo,
+    })
+
+    if (!billerRes.success) {
+      await supabase
+        .from('payment_attempts')
+        .update({
+          status: 'failed',
+          provider_code: billerRes.code,
+          provider_message: billerRes.message,
+          failure_reason: billerRes.message,
+          completed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('customer_transaction_id', customerTransactionId)
+
+      const err = new Error(billerRes.message || 'Payment initiation failed')
+      err.status = 400
+      err.code = billerRes.code || 'biller_initiation_failed'
+      throw err
+    }
+
+    // Update payment attempt to pending with Swich details
+    await supabase
+      .from('payment_attempts')
+      .update({
+        status: 'pending',
+        swich_order_id: billerRes.orderId,
+        provider_status: billerRes.status,
+        provider_code: billerRes.code,
+        provider_message: billerRes.consumerNumber
+          ? `1Bill Consumer: ${billerRes.consumerNumber}`
+          : billerRes.message,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('customer_transaction_id', customerTransactionId)
+
+    // Log biller event in payment_events
+    await supabase
+      .from('payment_events')
+      .insert([{
+        customer_transaction_id: customerTransactionId,
+        source: 'biller',
+        provider_status: billerRes.status || 'success',
+        checksum_valid: true,
+        payload: {
+          orderId: billerRes.orderId,
+          consumerNumber: billerRes.consumerNumber,
+          billReferenceNo: billerRes.billReferenceNo,
+          amount: computedAmount,
+          transactionId: billerRes.transactionId,
+        },
+      }])
+
+    const redirectUrl = `${config.siteUrl}/checkout/payment-return?ref=${encodeURIComponent(publicPaymentRef)}`
+
+    logger.info('Biller payment initiated successfully', {
+      orderId: order.id,
+      customerTransactionId,
+      consumerNumber: billerRes.consumerNumber,
+      billReferenceNo: billerRes.billReferenceNo,
+    })
+
+    return {
+      success: true,
+      requiresRedirect: false,
+      flow: 'biller',
+      redirectUrl,
+      publicPaymentRef,
+      customerTransactionId,
+      consumerNumber: billerRes.consumerNumber,
+      billReferenceNo: billerRes.billReferenceNo,
+      amount: computedAmount,
+      swichOrderId: billerRes.orderId,
+      reused: false,
+    }
   }
 
   // Build landing URL (GET)
@@ -378,7 +470,7 @@ async function applyPaymentStatusFallback(supabase, {
  * Returns only safe fields, never exposing PII or internal credentials.
  * Reference: docs/implementation.prd.md §5.2 & §9.2
  */
-export async function getPaymentStatusByRef({ ref, supabase }) {
+export async function getPaymentStatusByRef({ ref, supabase, config = getSwichConfig() }) {
   if (!ref) {
     const err = new Error('Public payment ref is required')
     err.status = 400
@@ -399,12 +491,80 @@ export async function getPaymentStatusByRef({ ref, supabase }) {
 
   const { data: attempts } = await supabase
     .from('payment_attempts')
-    .select('status, provider_status, provider_message, created_at, completed_at')
+    .select('id, status, provider_status, provider_code, provider_message, created_at, completed_at, swich_order_id, customer_transaction_id, amount')
     .eq('order_id', order.id)
     .order('created_at', { ascending: false })
     .limit(1)
 
   const latest = attempts?.[0]
+  let consumerNumber = null
+  let billReferenceNo = null
+
+  if (latest?.customer_transaction_id) {
+    if (latest.provider_message?.includes('1Bill Consumer:')) {
+      consumerNumber = latest.provider_message.split('1Bill Consumer:')[1]?.trim()?.split(' ')[0]
+    }
+
+    try {
+      const { data: events } = await supabase
+        .from('payment_events')
+        .select('payload')
+        .eq('customer_transaction_id', latest.customer_transaction_id)
+        .eq('source', 'biller')
+        .order('received_at', { ascending: false })
+        .limit(1)
+
+      if (events?.[0]?.payload) {
+        if (!consumerNumber) consumerNumber = events[0].payload.consumerNumber || null
+        if (!billReferenceNo) billReferenceNo = events[0].payload.billReferenceNo || null
+      }
+    } catch {
+      // payment_events lookup optional
+    }
+
+    // Live Inquire if attempt is non-terminal and API access is configured
+    if (['initiated', 'redirected', 'pending'].includes(latest.status) && config.clientSecret) {
+      try {
+        const inq = await inquireByCustomerTransactionId(latest.customer_transaction_id, config)
+        if (inq?.success && inq?.transaction) {
+          if (!consumerNumber && inq.transaction.consumerNumber) {
+            consumerNumber = inq.transaction.consumerNumber
+          }
+          if (!billReferenceNo && inq.transaction.billReferenceNo) {
+            billReferenceNo = inq.transaction.billReferenceNo
+          }
+          const mapped = mapSwichStatus(inq.transactionStatus)
+          if (mapped && mapped !== latest.status) {
+            const { error: rpcErr } = await supabase.rpc('apply_payment_status', {
+              p_customer_transaction_id: latest.customer_transaction_id,
+              p_new_status: mapped,
+              p_provider_status: inq.transactionStatus,
+              p_provider_code: inq.code,
+              p_provider_message: inq.message,
+              p_swich_order_id: inq.swichOrderId,
+              p_amount: inq.amount,
+            })
+            if (rpcErr) {
+              await applyPaymentStatusFallback(supabase, {
+                attempt: latest,
+                newStatus: mapped,
+                providerStatus: inq.transactionStatus,
+                swichOrderId: inq.swichOrderId,
+                amount: inq.amount,
+              })
+            }
+            latest.status = mapped
+            if (mapped === 'paid') {
+              order.payment_status = 'paid'
+              order.status = 'paid'
+            }
+          }
+        }
+      } catch (err) {
+        logger.warn('Live inquire error during status poll', { error: err.message })
+      }
+    }
+  }
 
   return {
     orderId: order.id,
@@ -415,6 +575,9 @@ export async function getPaymentStatusByRef({ ref, supabase }) {
     attemptStatus: latest?.status || 'initiated',
     paidAt: order.paid_at,
     providerMessage: latest?.provider_message || null,
+    consumerNumber,
+    billReferenceNo,
+    swichOrderId: latest?.swich_order_id || null,
   }
 }
 

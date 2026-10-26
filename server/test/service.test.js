@@ -12,10 +12,12 @@ test('Swich service integration tests', async (t) => {
   const config = {
     enabled: true,
     env: 'sandbox',
+    paymentFlow: 'pwa',
     clientId: 'test_client_id',
     clientSecret: 'test_client_secret',
     secretKey,
     apiBase: 'https://sandbox-api.swichnow.com',
+    authUrl: 'https://sandbox-auth.swichnow.com/connect/token',
     pwaGetUrl: 'https://sandbox-payin-pwa.swichnow.com/',
     siteUrl: 'https://store.example',
     minAmount: 10,

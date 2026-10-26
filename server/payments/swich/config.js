@@ -17,7 +17,8 @@ const envSchema = z.object({
   SWICH_MAX_AMOUNT: z.coerce.number().default(50000),
   SWICH_ATTEMPT_TTL_MINUTES: z.coerce.number().default(60),
   SWICH_TRANSACTION_TYPE: z.string().optional(),
-  SWICH_PWA_ONLY: z.string().optional().default('true').transform((v) => v === 'true'),
+  SWICH_PAYMENT_FLOW: z.enum(['biller', 'pwa']).default('biller'),
+  SWICH_PWA_ONLY: z.string().optional().default('false').transform((v) => v === 'true'),
   BASE_URL: z.string().optional().default('http://localhost:3000'),
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
   CRON_SECRET: z.string().optional(),
@@ -52,6 +53,7 @@ export function getSwichConfig(env = process.env) {
   return {
     enabled: parsed.SWICH_ENABLED,
     env: parsed.SWICH_ENV,
+    paymentFlow: parsed.SWICH_PAYMENT_FLOW,
     clientId: parsed.SWICH_CLIENT_ID,
     clientSecret: parsed.SWICH_CLIENT_SECRET,
     // TODO(VERIFY): Is SecretKey the same value as client_secret? Treated as separate env var with fallback.
