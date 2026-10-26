@@ -44,15 +44,15 @@ export function normaliseMsisdn(rawPhone) {
  * @param {object} params - { customerTransactionId, orderNumber, amount, payeeName, email, phone, publicPaymentRef }
  * @returns {string} Fully formed redirect URL
  */
-export function buildLandingGetUrl(config, {
-  customerTransactionId,
-  orderNumber,
-  amount,
-  payeeName,
-  email,
-  phone,
-  publicPaymentRef,
-  billReferenceNo: customBillRef,
+export function buildLandingGetUrl(config, {https://payin-pwa.swichnow.com/
+  customerTransactionId,20262026143201234
+  orderNumber,12345
+  amount,10000
+  payeeName,test
+  email,test@gmail.com
+  phone,03291234567
+  publicPaymentRef,null
+  billReferenceNo: customBillRef,pk20261026146104321
 }) {
   if (!config.clientId) throw new Error('clientId is required')
   if (!customerTransactionId) throw new Error('customerTransactionId is required')
