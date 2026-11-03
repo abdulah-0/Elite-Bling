@@ -101,6 +101,39 @@ src/
 - Edit existing products
 - Delete products
 - Manage product status (featured, top product)
+- **Swich PayOut Management**:
+  - Live merchant balance query & balance history snapshots
+  - Two-step outgoing IBFT disbursement workflow (Fetch Title verification -> Admin Review & Confirmation)
+  - Duplicate protection with client-side & database idempotency keys
+  - Read-only transaction status inquiry with Swich
+  - Full audit trail (status events and provider HTTP exchange logs)
+
+## Swich PayOut Integration (IBFT Disbursements)
+
+The store includes an administrative PayOut module for outgoing bank and e-wallet disbursements (e.g. seller withdrawals, affiliate commissions, customer refunds):
+
+1. **Database Migration**:
+   - Run the SQL migration in your Supabase SQL Editor:
+     supabase/migrations/20261103_swich_payouts.sql\r
+   - This creates tables: payouts, payout_status_events, payout_provider_attempts, payout_balance_snapshots.
+
+2. **Server-Side Environment Variables**:
+   Add to your .env / Vercel Environment Variables:
+   \env
+   SWICH_PAYOUTS_ENABLED=false             # Set to true to unlock IBFT submissions
+   SWICH_PAYOUT_ENV=sandbox                # sandbox | production
+   SWICH_PAYOUT_CLIENT_ID=your-client-id
+   SWICH_PAYOUT_CLIENT_SECRET=your-client-secret
+   SWICH_WHITELISTED_PUBLIC_IP=your-server-ip
+   PAYOUT_ENCRYPTION_KEY=your-32-byte-hex-encryption-key
+   SWICH_ADMIN_EMAILS=snakeyes358@gmail.com
+   \\r
+
+3. **Security & Guardrails**:
+   - All Swich PayOut API calls are executed strictly on the server (/api/admin/payouts).
+   - Every request is authenticated using the administrator's Supabase JWT.
+   - Recipient CNIC, phone, and account numbers are encrypted at rest using AES-256-GCM.
+   - Never retries IBFT transfers on timeout or network errors; performs safe inquiry to determine outcome.
 
 ## Database Schema
 

@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import { createClient } from '@supabase/supabase-js'
 import { createSwichRouter, createOrderRouter, createCronRouter } from './routes/swich.js'
+import { createPayoutRouter } from './routes/payouts.js'
 
 const app = express()
 app.use(cors())
@@ -17,6 +18,9 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 app.use('/api/payments/swich', createSwichRouter(supabase))
 app.use('/api/orders', createOrderRouter(supabase))
 app.use('/api/cron', createCronRouter(supabase))
+
+// Swich PayOut admin routes
+app.use('/api/admin/payouts', createPayoutRouter(supabase))
 
 // Rapid Gateway OAuth token
 async function getAccessToken() {

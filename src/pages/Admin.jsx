@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase/client'
-import { FiEdit2, FiTrash2, FiPlus, FiX, FiPackage } from 'react-icons/fi'
+import { FiEdit2, FiTrash2, FiPlus, FiX, FiPackage, FiDollarSign } from 'react-icons/fi'
+import PayoutOverview from './payouts/PayoutOverview'
 
 const Admin = () => {
+    const [activeTab, setActiveTab] = useState('products') // 'products' | 'payouts'
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
@@ -137,18 +139,54 @@ const Admin = () => {
     return (
         <div className="py-16 md:py-20 min-h-screen">
             <div className="container-custom">
-                <div className="flex justify-between items-center mb-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-heading font-bold text-ivory mb-1">Admin Dashboard</h1>
-                        <p className="text-dark-400 text-sm">Manage your Ellite Bling product catalog</p>
+                        <p className="text-dark-400 text-sm">
+                            {activeTab === 'products'
+                                ? 'Manage your Ellite Bling product catalog'
+                                : 'Manage and monitor outgoing disbursements via Swich PayOut'}
+                        </p>
                     </div>
-                    <button onClick={() => openModal()} className="btn-primary flex items-center space-x-2">
-                        <FiPlus />
-                        <span>Add Product</span>
+
+                    {activeTab === 'products' && (
+                        <button onClick={() => openModal()} className="btn-primary flex items-center space-x-2">
+                            <FiPlus />
+                            <span>Add Product</span>
+                        </button>
+                    )}
+                </div>
+
+                {/* Tab Navigation */}
+                <div className="flex border-b border-gold-400/20 mb-8 space-x-2">
+                    <button
+                        onClick={() => setActiveTab('products')}
+                        className={`flex items-center space-x-2 px-5 py-3 text-sm font-semibold tracking-wider uppercase transition-colors border-b-2 ${
+                            activeTab === 'products'
+                                ? 'border-gold-400 text-gold-400'
+                                : 'border-transparent text-dark-400 hover:text-ivory'
+                        }`}
+                    >
+                        <FiPackage />
+                        <span>Products Catalog</span>
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab('payouts')}
+                        className={`flex items-center space-x-2 px-5 py-3 text-sm font-semibold tracking-wider uppercase transition-colors border-b-2 ${
+                            activeTab === 'payouts'
+                                ? 'border-gold-400 text-gold-400'
+                                : 'border-transparent text-dark-400 hover:text-ivory'
+                        }`}
+                    >
+                        <FiDollarSign />
+                        <span>Swich PayOuts (Disbursements)</span>
                     </button>
                 </div>
 
-                {loading ? (
+                {activeTab === 'payouts' ? (
+                    <PayoutOverview />
+                ) : loading ? (
                     <div className="text-center py-20">
                         <div className="w-12 h-12 border-2 border-gold-400 border-t-transparent animate-spin mx-auto"></div>
                     </div>
